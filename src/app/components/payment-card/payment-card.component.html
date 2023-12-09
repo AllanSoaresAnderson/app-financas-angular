@@ -2,12 +2,12 @@
 <table class="table table-dark">
     <thead>
         <tr>
-            <th *ngFor="let name of listTableColumnNames">{{name}}</th>
+            <th *ngFor="let name of listColumnNames">{{name}}</th>
         </tr>
     </thead>
 
     <tbody class="table-hover">
-        <tr class="form-group" *ngFor="let name of listColumnNames">
+        <tr class="form-group" *ngFor="let name of resultList.slice(currentPage * pageSize, (currentPage +1) * pageSize)">
             <td class="">{{name}}</td>
             <td class="input-group">
                 <input type="number" name="" id="" placeholder="0,00"
@@ -30,7 +30,13 @@
             </td>
         </tr>
     </tbody>
-
-
 </table>
+
+<mat-paginator 
+    [length]="resultList.length"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage"
+    (page)="onChangePage($event)"
+>
+</mat-paginator>
 

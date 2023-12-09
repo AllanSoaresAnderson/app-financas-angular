@@ -1,15 +1,21 @@
 <div class="side-bar-container">
-    <a href="">Finances</a>
+    <a [routerLink]="['/']">Finances</a>
     <div class="menus">
         <div class="menu-top">
             <app-side-bar-link 
-                *ngFor="let link of listSideBarLinkTop"
-                [nameLink]="link"></app-side-bar-link>
+                *ngFor="let menu of listSideBarLinkTop"
+                [nameLink]="menu.name"
+                [link]="menu.link"
+                [icon]="menu.icon"
+            ></app-side-bar-link>
         </div>
         <div class="menu-bottom">
             <app-side-bar-link 
-            *ngFor="let link of listSideBarLinkBottom"
-            [nameLink]="link"></app-side-bar-link>
+            *ngFor="let menu of listSideBarLinkBottom"
+            [nameLink]="menu.name"
+            [link]="menu.link"
+            [icon]="menu.icon"
+            ></app-side-bar-link>
         </div>
     </div>
     <app-side-bar-perfil [userName]="userName"></app-side-bar-perfil>

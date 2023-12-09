@@ -13,7 +13,7 @@ export class CardComponent {
     linkSelecionado: string = 'Contas';
     nameTable:string = 'Pagamentos';
     listTableColumnNames: string[] = ['Nome', 'Custos']
-    listColumnNames: string[] = ['Faculdade', 'Carro', 'Luz', 'Água', 'Internet', 'Aluguel', 'Cartão']
+    resultList: string[] = ['Faculdade', 'Carro', 'Luz', 'Água', 'Internet', 'Aluguel', 'Cartão']
 
 
 
@@ -21,12 +21,12 @@ export class CardComponent {
         if (link === 'Entradas'){
             this.nameTable = 'Entradas'
             this.listTableColumnNames = ['Nome', 'Valor']
-            this.listColumnNames = ['Salário']
+            this.resultList = ['Salário']
         }
         else{
             this.nameTable = 'Pagamentos';
             this.listTableColumnNames = ['Nome', 'Custos']
-            this.listColumnNames = ['Faculdade', 'Carro', 'Luz', 'Água', 'Internet', 'Aluguel', 'Cartão']
+            this.resultList = ['Faculdade', 'Carro', 'Luz', 'Água', 'Internet', 'Aluguel', 'Cartão']
         
         }
 

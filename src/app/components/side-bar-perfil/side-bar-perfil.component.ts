@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router'
 
 @Component({
   selector: 'app-side-bar-perfil',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './side-bar-perfil.component.html',
   styleUrl: './side-bar-perfil.component.css'
 })

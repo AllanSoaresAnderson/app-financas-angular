@@ -18,13 +18,13 @@
     <div class="card-body">
         <app-payment-card *ngIf="linkSelecionado === 'Contas'"
         [nameTable]="nameTable"
-        [listTableColumnNames]="listTableColumnNames"
-        [listColumnNames]="listColumnNames"
+        [listColumnNames]="listTableColumnNames"
+        [resultList]="resultList"
         ></app-payment-card>
         <app-payment-card *ngIf="linkSelecionado === 'Entradas'"
         [nameTable]="nameTable"
-        [listTableColumnNames]="listTableColumnNames"
-        [listColumnNames]="listColumnNames"
+        [listColumnNames]="listTableColumnNames"
+        [resultList]="resultList"
         ></app-payment-card>
     </div>
 </div>

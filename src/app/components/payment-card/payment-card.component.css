@@ -47,6 +47,17 @@ ul a{
 }
 
 
+::ng-deep .mat-mdc-paginator{
+    border-radius: 10px;
+}
+
+
+::ng-deep .mat-mdc-paginator-outer-container{
+    background-color: var(--color-black-1);
+    border-radius: 10px;
+}
+
+
 
 
    

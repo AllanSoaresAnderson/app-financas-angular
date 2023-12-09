@@ -1,5 +1,6 @@
 .side-bar-perfil-container{
     margin-bottom: 15px;
+    width: 200px;
 }
 
 .side-bar-perfil-container a img{
@@ -9,7 +10,10 @@
 }
 
 .side-bar-perfil-container a{
+    display: flex;
+    flex-direction: row;
     text-decoration: none;
+    align-items: center;
     color: white;
 }
 
@@ -20,4 +24,7 @@
 .side-bar-perfil-container a span{
     font-size: 14px;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

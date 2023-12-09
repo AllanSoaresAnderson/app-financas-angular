@@ -1,6 +1,4 @@
 .sider-bar-link-container{
-    background-color: var(--color-gray-2);
-    border-radius: 20px;
     width: 100%;
     margin-bottom: 10px;
 }
@@ -22,5 +20,14 @@
 
 .link_content:hover{
     color: var(--color-gray-1);
+}
+
+.active-link{
+    background-color: var(--color-gray-2);
+    border-radius: 20px;
+}
+
+.icon{
+    margin-left: 10px;
 }
 
