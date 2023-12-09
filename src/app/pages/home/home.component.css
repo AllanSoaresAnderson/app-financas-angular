@@ -1,0 +1,25 @@
+.home__container{
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+}
+
+
+.home__content__container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+
+
+
+
+.home__content{
+    padding: 0px 30px;
+}
+
+
+
+

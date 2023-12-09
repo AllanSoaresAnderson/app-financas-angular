@@ -1,0 +1,57 @@
+.container_search-bar{
+    background-color: var(--color-gray-2);
+    border-radius: 26px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+button, input{
+    background: none;
+    border: none;
+    outline: none;
+}
+
+form{
+    position: relative;
+}
+
+input {
+    font-size: 14px;
+    color: white;
+    padding: 10px;
+    margin-left: 10px;
+    width: 100%;
+
+}
+
+input:focus {
+    background: none;
+    border: none;
+    outline: none;
+}
+
+input::placeholder{
+    font-weight: 600;
+}
+
+button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    position: absolute;
+    top: 8px;
+    right: 0;
+}
+
+
+
+button fa-icon{
+    
+    color: white;
+}
+

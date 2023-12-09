@@ -1,0 +1,30 @@
+<div class="card payment-card__container">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <button 
+                    class="nav-link"
+                    (click)="selecionarLink('Contas')"
+                >Contas</button>
+            </li>
+            <li class="nav-item">
+                <button 
+                    class="nav-link"
+                    (click)="selecionarLink('Entradas')"
+                >Entradas</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <app-payment-card *ngIf="linkSelecionado === 'Contas'"
+        [nameTable]="nameTable"
+        [listTableColumnNames]="listTableColumnNames"
+        [listColumnNames]="listColumnNames"
+        ></app-payment-card>
+        <app-payment-card *ngIf="linkSelecionado === 'Entradas'"
+        [nameTable]="nameTable"
+        [listTableColumnNames]="listTableColumnNames"
+        [listColumnNames]="listColumnNames"
+        ></app-payment-card>
+    </div>
+</div>

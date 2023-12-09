@@ -1,0 +1,18 @@
+nav ul{
+    margin-left: auto;
+}
+
+.navbar-brand{
+    margin-left: 20px;
+}
+
+
+nav{
+    margin-bottom: 30px;
+}
+
+
+app-search-bar{
+    margin-left: 30px;
+    margin-top: 15px;
+}

@@ -1,0 +1,26 @@
+.sider-bar-link-container{
+    background-color: var(--color-gray-2);
+    border-radius: 20px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+.link_content{
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0px 20px 0px 15px;
+    text-decoration: none;
+    color: white;
+}
+
+.title{
+    margin-left: 15px;
+}
+
+.link_content:hover{
+    color: var(--color-gray-1);
+}
+
