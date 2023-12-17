@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SideBarLinkComponent } from "../side-bar-link/side-bar-link.component";
 import { SideBarPerfilComponent } from "../side-bar-perfil/side-bar-perfil.component";
-import { IconDefinition, faHouse, faList, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition, faHouse, faList, faCircleInfo, faMoneyBillTransfer } from '@fortawesome/free-solid-svg-icons';
 import { RouterModule } from '@angular/router'
 
 @Component({
@@ -17,6 +17,7 @@ export class SideBarComponent {
 
     listSideBarLinkTop:{name: string, link:string, icon: IconDefinition}[] = [
         { name: 'Home', link:'', icon : faHouse },
+        { name: 'Pagamentos', link:'/Pagamentos', icon : faMoneyBillTransfer},
         { name: 'Cadastros', link:'/Cadastros', icon : faList},
     ];
 

@@ -10,10 +10,10 @@ import { PaymentCardComponent } from "../payment-card/payment-card.component";
     imports: [CommonModule, PaymentCardComponent]
 })
 export class CardComponent {
-    linkSelecionado: string = 'Contas';
-    nameTable:string = 'Pagamentos';
-    listTableColumnNames: string[] = ['Nome', 'Custos']
-    resultList: string[] = ['Faculdade', 'Carro', 'Luz', 'Água', 'Internet', 'Aluguel', 'Cartão']
+    linkSelecionado: string = 'Entradas';
+    nameTable:string = 'Entradas';
+    listTableColumnNames: string[] = ['Nome', 'Valor']
+    resultList: string[] = ['Salário']
 
 
 
