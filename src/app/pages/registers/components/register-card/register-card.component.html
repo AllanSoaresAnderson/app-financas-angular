@@ -1,0 +1,43 @@
+<div class="card payment-card__container">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <button 
+                    class="nav-link"
+                    (click)="selectPageLink('Contas')"
+                >Contas</button>
+            </li>
+            <li class="nav-item">
+                <button 
+                    class="nav-link"
+                    (click)="selectPageLink('Entradas')"
+                >Entradas</button>
+            </li>
+            <li class="nav-item">
+                <button 
+                    class="nav-link"
+                    (click)="selectPageLink('Entidades')"
+                >Entidades</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div>
+            <app-show-registers *ngIf="!screenNewRegister"
+                [title]="titlePageLink"
+                [resultList]="resultList"
+                (newRegister)="addNewRegister($event)"
+            ></app-show-registers>
+            <app-register-form *ngIf="screenNewRegister"
+                [titlePage]="titlePageLink"
+                [typeForm]="typeForm"
+            ></app-register-form>
+            <button 
+                class="btn btn-light btn-sm" 
+                *ngIf="screenNewRegister"
+                (click)="return()"
+            
+            >Voltar</button>
+        </div>
+    </div>
+</div>

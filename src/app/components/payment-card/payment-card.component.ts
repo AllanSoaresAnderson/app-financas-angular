@@ -3,10 +3,6 @@ import { CommonModule } from '@angular/common';
 import { PaymentCardModule } from './payment-card.module';
 import { PageEvent } from '@angular/material/paginator';
 
-
-
-
-
 @Component({
   selector: 'app-payment-card',
   standalone: true,

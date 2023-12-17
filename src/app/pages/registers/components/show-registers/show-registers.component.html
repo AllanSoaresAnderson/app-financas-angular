@@ -1,0 +1,34 @@
+<h1 class="card-title"> {{title}}</h1>
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th>Nome:</th>
+        </tr>
+    </thead>
+
+    <tbody class="table-hover">
+        <tr class="form-group tr-register-line" *ngFor="let result of resultList.slice(currentPage * pageSize, (currentPage +1) * pageSize)">
+            <td class="register-line">
+                <a href="" class="btn btn-dark"
+                >
+                {{ result }} </a>
+                <button class="btn btn-dark"><fa-icon [icon]="iconEdit"></fa-icon></button>
+                <button class="btn btn-danger ms-1"><fa-icon [icon]="iconDel"></fa-icon></button>
+            </td>
+        </tr>
+        <tr class="last-row-table">
+            <td class="add-register-line">
+                <button class="btn btn-success" (click)="addNewRegister()"><fa-icon [icon]="iconAdd"></fa-icon></button>
+            </td>
+        </tr>
+        
+    </tbody>
+</table>
+
+<mat-paginator 
+    [length]="resultList.length"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage"
+    (page)="onChangePage($event)"
+>
+</mat-paginator>

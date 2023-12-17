@@ -1,0 +1,46 @@
+<div class="card register-form__container">
+    <h1 class="card-title">{{ titlePage }}</h1>
+
+    <!--Formulário de cadastro de gastos-->
+    <form class="card-body" *ngIf="typeForm === 'form-register-expenses'">
+        <div>
+            <label for="form-expenses-name" class="form-label">Nome da Despesa:</label>
+            <input type="text" class="form-control" id="form-expenses-name"  >
+        </div>
+        <div class="register-container-button">
+            <button class="btn btn-success">Adicionar</button>
+            <button class="btn btn-danger">Cancelar</button>
+        </div>
+    </form>
+    <!--Fim: Formulário de cadastro de gastos-->
+
+    <!--Formulário de cadastro de Entradas-->
+    <form class="card-body" *ngIf="typeForm === 'form-register-entry'">
+        <div>
+            <label for="form-entry-name" class="form-label">Nome da Entrada:</label>
+            <input type="text" class="form-control" id="form-entry-name" >
+        </div>
+        <div class="register-container-button">
+            <button class="btn btn-success">Adicionar</button>
+            <button class="btn btn-danger">Cancelar</button>
+        </div>
+    </form>
+    <!--Fim: Formulário de cadastro de Entradas-->
+
+    <!--Formulário de cadastro de Entidades-->
+    <form class="card-body" *ngIf="typeForm === 'form-register-entities'">
+        <div>
+            <label for="form-entity-name" class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="form-entity-name" >
+        </div>
+        <div class="register-container-button">
+            <button class="btn btn-success">Adicionar</button>
+            <button class="btn btn-danger">Cancelar</button>
+        </div>
+    </form>
+    <!--Fim: Formulário de cadastro de Entradas-->
+
+</div>
+
+
+
