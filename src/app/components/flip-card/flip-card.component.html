@@ -1,0 +1,20 @@
+<div id="flip-card__container">
+    <div class="flip-card">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <fa-icon [icon]="icon" ></fa-icon>
+            </div>
+            <div class="flip-card-back">
+                <div class="card-back-content">
+                    <header>
+                        <h2>{{title}}</h2>
+                        <p>{{description}}</p>
+                    </header>
+                    <footer>
+                        <button [routerLink]="link" >{{nameButton}}</button>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

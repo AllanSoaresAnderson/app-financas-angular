@@ -1,0 +1,21 @@
+<div class="card text-center bg-dark">
+    <div class="card-header">
+        <h2 mat-dialog-title class="card-title text-warning"><fa-icon [icon]="icon"></fa-icon> {{data.title}} <fa-icon [icon]="icon"></fa-icon></h2>
+    </div>
+    <div mat-dialog-content class="card-body">
+        <p class="card-text">{{data.warningText}}</p>
+    </div>
+    <div mat-dialog-actions class="card-footer modal__footer">
+        <button
+            class="btn btn-danger" 
+            mat-dialog-close
+        >{{data.denyButton}}</button>
+        <button
+            class="btn btn-warning" 
+            [mat-dialog-close]="true"
+        >{{data.confirmButton}}</button>
+    </div>
+</div>
+
+
+

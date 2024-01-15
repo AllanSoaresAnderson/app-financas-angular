@@ -1,0 +1,64 @@
+.container-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-form{
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.input-label{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.input-label label{
+    color: white;
+    padding: 8px;
+}
+
+.input-label input, .select{
+    color: white;
+    background: none;
+    outline: none;
+    padding: 9px;
+    text-align: start;
+    border: 1px solid gray;
+    border-bottom: 2px solid aqua;
+    border-radius: 8px;
+}
+
+.dropdown *{
+    box-sizing: border-box;
+}
+
+.select{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.select-clicked{
+    border: 2px #26489a solid;
+    box-shadow: 0 0 0.8em #26489a;
+}
+
+.select:hover{
+    background: #323741;
+}
+
+
+
+
+
+
+
+
+

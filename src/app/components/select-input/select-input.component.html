@@ -1,0 +1,10 @@
+<div class="select-container">  
+    <button (click)="openOptions()">{{selectedField}}</button>
+    <ul *ngIf="optionsOpened">
+        <li *ngFor="let option of listOptions"
+            (click)="selectOption(option)"
+            [ngClass]="{'listActive': selectedField === option}"
+        >{{option}}</li>
+    </ul>
+</div>
+

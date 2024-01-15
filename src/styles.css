@@ -4,7 +4,8 @@
 
 :root{
     --color-black-1: #020401;
-    --color-black-2: #0b0b0b;
+    --color-black-2: #010409;
+    --color-black-3: #0D1117;
     --color-blue-1: #9ac0b8;
     --color-blue-2: #6774fe;
     --color-blue-3: #4e82ce;
@@ -20,9 +21,20 @@
 
 
 body{
-    background-color: var(--color-black-2);
+    background-color: var(--color-black-3);
 }
 
+.mat-mdc-paginator {
+    background: #3D3D43 !important;
+}
+
+
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    background: #3D3D43 !important;
+    border-radius: 15px !important;
+    color: white;
+}
 
 
 

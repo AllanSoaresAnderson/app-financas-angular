@@ -1,0 +1,20 @@
+h2{
+    margin-top: 15px;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.modal__footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding: 15px;
+}
+
+.modal__footer button{
+    margin-left: 15px;
+}
+
+p{
+    color: #a7a7a7;
+}

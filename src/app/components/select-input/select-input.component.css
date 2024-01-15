@@ -1,0 +1,50 @@
+.select-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+
+button{
+    color: white;
+    background: none;
+    outline: none;
+    padding: 9px;
+    text-align: start;
+    border: 1px solid gray;
+    border-bottom: 2px solid aqua;
+    border-radius: 8px;
+}
+
+ul{
+    background: #0a0d11;
+    list-style: none;
+    padding: 0px;
+    color: gray;
+    border-radius: 5px;
+    position: absolute;
+    top: 100%; 
+    left: 0; 
+    width: 100%; 
+    margin: 0; 
+}
+
+li{
+    text-align: end;
+    padding: 5px;
+    padding-right: 30px;
+    border-bottom: 1px solid aqua;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+li:hover{
+    background: gray;
+    color: aqua;
+}
+
+.listActive{
+    text-align: center;
+    background: gray;
+    color: aqua;
+}
