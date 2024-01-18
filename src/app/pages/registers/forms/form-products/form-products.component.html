@@ -1,0 +1,30 @@
+<div class="container-form">
+    <div class="card-form">
+        <div class="input-label">
+            <label for="">Type:</label>
+            <app-select-input 
+                [listOptions]="listProductType"
+                [(selectedField)]="selectedProductType" 
+            ></app-select-input>
+        </div>
+        <div class="input-label">
+            <label for="">Name:</label>
+            <input type="text">
+        </div>
+        <div class="input-label">
+            <label for="">Value type:</label>
+            <app-select-input 
+            [listOptions]="listValueType"
+            [(selectedField)]="selectedValueType" 
+        ></app-select-input>
+        </div>
+        <div class="input-label">
+            <label for="">Value</label>
+            <input type="text" [placeholder]="selectedValueType">
+        </div>
+        <div class="input-label">
+            <label for="">Quantity of units:</label>
+            <input type="number">
+        </div>
+    </div>
+</div>

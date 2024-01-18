@@ -1,1 +1,28 @@
-<app-form-transaction></app-form-transaction>
+<div class="registers-container">
+    <div class="cards-container">
+        <app-flip-card 
+            [@fadeInOut] 
+            [icon]="listIcons[0]"
+            [title]="'Transactions'"
+            [description]="'Let\'s to register a new Transaction?'"
+            [nameButton]="'Yes!'"
+            [link]="'/Registers/Transactions'"
+        ></app-flip-card>
+        <app-flip-card 
+            [@fadeInOut]
+            [icon]="listIcons[1]"
+            [title]="'Entities'"
+            [description]="'Time to register a new Entity!'"    
+            [nameButton]="'So let\'s go!'"
+            [link]="'/Registers/Entities'"
+        ></app-flip-card>
+        <app-flip-card 
+            [@fadeInOut]
+            [icon]="listIcons[2]"
+            [title]="'Products'"
+            [description]="'You would like to register a new product?'"
+            [nameButton]="'Yeah!'"
+            [link]="'/Registers/Products'"
+        ></app-flip-card>
+    </div>
+</div>

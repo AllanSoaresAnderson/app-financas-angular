@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-select-input',
@@ -14,8 +14,13 @@ export class SelectInputComponent {
   optionsOpened:boolean = false;
   @Input()
   selectedField:string = 'Choose';
+  @Output() 
+  selectedFieldChange: EventEmitter<string>= new EventEmitter();
   @Input()
   listOptions: string[] = ['First option', 'Second Option']
+  
+
+
 
 
   @HostListener('document:click', ['$event'])
@@ -33,7 +38,8 @@ export class SelectInputComponent {
 
   selectOption(option:string){
     this.selectedField = option;
-    this.openOptions()
+    this.selectedFieldChange.emit(option);
+    this.openOptions();
   }
 
 }

@@ -1,35 +1,81 @@
 <div class="container-form">
     <div class="card-form">
         <div class="input-label">
-            <label for="">Type: </label>
-            <input type="text" value="Expense" disabled>
+            <label for="">Transaction Type:</label>
+            <app-select-input 
+                [listOptions]="transactionType"
+                [(selectedField)]="selectedTransactionType" 
+            ></app-select-input>
+        </div>
+        <div class="input-label">
+            <label for="">Entity:</label>
+            <app-select-input 
+                [listOptions]="listEntities"
+                [(selectedField)]="selectedEntity" 
+            ></app-select-input>
         </div>
         <div class="input-label">
             <label for="">Category:</label>
             <app-select-input 
-            [listOptions]="listOptionsCategory"
-            [selectedField]="'Choose'"
-        ></app-select-input>
+                [listOptions]="listOptionsCategory"
+                [(selectedField)]="selectedCategoryTransaction" 
+            ></app-select-input>
         </div>
         <div class="input-label">
             <label for="">Name:</label>
             <input type="text" value="">
         </div>
-
-
-        <div class="input-label">
-            <label for="">Value:</label>
-            <input type="text" value="">
+        <div class="input-label" *ngIf="selectedCategoryTransaction === 'Fixed'">
+            <label for="">Type Fixed Transaction:</label>
+            <app-select-input 
+                [listOptions]="listOptionsTypeFixedTransaction"
+                [(selectedField)]="selectedTypeFixedTransaction" 
+            ></app-select-input>
         </div>
-        <div class="input-label">
+        <div 
+            class="input-label"
+            *ngIf="selectedCategoryTransaction === 'Fixed'
+                && selectedTypeFixedTransaction != 'Monthly'
+                && selectedTypeFixedTransaction != 'Annual' 
+                && selectedTypeFixedTransaction != 'Weekly'">
+            <label for="">Amount Time: </label>
+            <input type="number" [placeholder]="selectedTypeFixedTransaction">
+        </div>
+        <div class="input-label" *ngIf="selectedCategoryTransaction === 'Fixed'">
+            <label for="">Is Installment?</label>
+            <div>
+                <label>
+                    <input type="radio" name="isInstallment" [value]="false" [(ngModel)]="isInstallment"> No
+                </label>
+            
+                <label>
+                    <input type="radio" name="isInstallment" [value]="true" [(ngModel)]="isInstallment"> Yes
+                </label>
+            </div>
+        </div>
+        <div class="input-label" *ngIf="isInstallment">
+            <label for="">The Installments are?</label>
+            <div>
+                <label>
+                    <input type="radio" name="typeInstallment" [value]="'fixed'" [(ngModel)]="typeInstallments"> Fixed
+                </label>
+            
+                <label>
+                    <input type="radio" name="typeInstallment" [value]="'variable'" [(ngModel)]="typeInstallments"> Variable
+                </label>
+            </div>
+        </div>
+        <div class="input-label" *ngIf="isInstallment">
+            <label for="">Amount Installments: </label>
+            <input type="number">
+        </div>
+        <div class="input-label" *ngIf="selectedCategoryTransaction === 'Eventual'">
             <label for="">Date of deposit or expenditure:</label>
             <input type="date" value="">
         </div>
-
-
-        
-
-
-
+        <div class="input-label">
+            <label for="">Total Value:</label>
+            <input type="text" value="">
+        </div>
     </div>
 </div>
