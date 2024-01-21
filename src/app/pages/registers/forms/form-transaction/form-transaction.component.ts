@@ -29,7 +29,7 @@ export class FormTransactionComponent implements OnInit {
   totalValue: number = 0;
   eventualTransaction?:EventualTransaction;
   fixedTransaction?:FixedTransaction;
-  selectedDate?:Date;
+  selectedDate?:string;
   disabledFieldsUpdate:boolean = false;
 
   @Input()
@@ -48,10 +48,9 @@ export class FormTransactionComponent implements OnInit {
   }
 
   save(){
+    this.fieldsError = new Map();
     if(this.validateFields()){
-
-    }else{
-
+      
     }
   }
 
@@ -75,11 +74,11 @@ export class FormTransactionComponent implements OnInit {
       || this.eventualTransaction === null){
         return false;
       }
-    if(this.selectedDate === undefined
-      || this.selectedDate < new Date()){
-      this.fieldsError.set('selectedDate', true);
-      return false;
-    }
+      if(this.selectedDate === undefined
+        || new Date(this.selectedDate) < new Date()){
+        this.fieldsError.set('selectedDate', true);
+        return false;
+      }
     if(this.totalValue < 1){
       this.fieldsError.set('totalValue', true);
       return false;
@@ -137,7 +136,6 @@ export class FormTransactionComponent implements OnInit {
       return false;
     }else{
       if(this.fixedTransaction.isInstallment ){
-        
         if(this.fixedTransaction.typeInstallment !== 'Fixed' && this.fixedTransaction.typeInstallment !== 'Variable'){
           this.fieldsError.set('fixedTransaction.typeInstallment', true);
           return false;
@@ -148,21 +146,13 @@ export class FormTransactionComponent implements OnInit {
             this.fieldsError.set('fixedTransaction.amountInstallment', true);
             return false;
           }
+      }else{
+        this.fixedTransaction.typeInstallment = undefined;
+        this.fixedTransaction.amountInstallment = undefined;
       }
     }
-    // if(this.fixedTransaction.value === undefined
-    //   || this.fixedTransaction.value === null
-    //   || this.fixedTransaction.value < 1){
-    //     this.fieldsError.set('fixedTransaction.value', true);
-    //     return false;
-    //   }
-    const dataAtual = new Date()
-
-    if(this.selectedDate != undefined){
-      this.selectedDate = new Date(this.selectedDate);
-    }
     if(this.selectedDate === undefined
-      || this.selectedDate < dataAtual){
+      || new Date(this.selectedDate) < new Date()){
       this.fieldsError.set('selectedDate', true);
       return false;
     }
@@ -177,10 +167,13 @@ export class FormTransactionComponent implements OnInit {
   validateTypeFixedTransaction():boolean{
     switch(this.fixedTransaction?.type){
       case 'Monthly':
+        this.fixedTransaction.amountTime = undefined;
         return true;
       case 'Annual':
+        this.fixedTransaction.amountTime = undefined;
         return true;
       case 'Weekly':
+        this.fixedTransaction.amountTime = undefined;
         return true;
       case 'Amount of Years':
         return true;
