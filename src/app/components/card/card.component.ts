@@ -14,7 +14,7 @@ export class CardComponent implements OnInit{
     constructor(private earningService: DataService){}
     
     ngOnInit(): void {
-        this.getListEarnings()
+        // this.getListEarnings()
     }
 
 
@@ -28,12 +28,12 @@ export class CardComponent implements OnInit{
         if (link === 'Entradas'){
             this.nameTable = 'Entradas'
             this.listTableColumnNames = ['Nome', 'Valor']
-            this.getListEarnings()
+            // this.getListEarnings()
         }
         else{
             this.nameTable = 'Pagamentos';
             this.listTableColumnNames = ['Nome', 'Custos']
-            this.getListExpenses()
+            // this.getListExpenses()
         
         }
         this.linkSelecionado = link;
@@ -41,25 +41,25 @@ export class CardComponent implements OnInit{
 
 
 
-    getListEarnings(){
-        this.earningService.getListEarnings().subscribe(
-            (response) => {
-                this.resultList = response
-            },
-            (error) => {
-                console.error(error);
-              } 
-            )
-    }
+    // getListEarnings(){
+    //     this.earningService.getListEarnings().subscribe(
+    //         (response) => {
+    //             this.resultList = response
+    //         },
+    //         (error) => {
+    //             console.error(error);
+    //           } 
+    //         )
+    // }
 
-    getListExpenses(){
-        this.earningService.getListExpenses().subscribe(
-            (response) => {
-                this.resultList = response
-            },
-            (error) => {
-                console.error(error);
-              } 
-            )
-    }
+    // getListExpenses(){
+    //     this.earningService.getListExpenses().subscribe(
+    //         (response) => {
+    //             this.resultList = response
+    //         },
+    //         (error) => {
+    //             console.error(error);
+    //           } 
+    //         )
+    // }
 }

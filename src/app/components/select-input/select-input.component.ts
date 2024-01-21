@@ -17,9 +17,13 @@ export class SelectInputComponent {
   @Output() 
   selectedFieldChange: EventEmitter<string>= new EventEmitter();
   @Input()
-  listOptions: string[] = ['First option', 'Second Option']
-  
-
+  listOptions: string[] = ['First option', 'Second Option'];
+  @Input()
+  disabled:boolean = false;
+  @Input()
+  error:boolean = false;
+  @Input()
+  errorMsg:string = 'error';
 
 
 

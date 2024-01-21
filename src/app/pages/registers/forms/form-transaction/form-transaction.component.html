@@ -4,7 +4,12 @@
             <label for="">Transaction Type:</label>
             <app-select-input 
                 [listOptions]="transactionType"
-                [(selectedField)]="selectedTransactionType" 
+                [selectedField]="transaction?.type??'Choose'" 
+                (selectedFieldChange)="transactionTypeChange($event)"
+                [disabled]="disabledFieldsUpdate"
+                [error]="fieldsError.has('transaction.type') 
+                        && fieldsError.get('transaction.type')? true : false"
+                [errorMsg]="'Choose an option'"
             ></app-select-input>
         </div>
         <div class="input-label">
@@ -18,64 +23,154 @@
             <label for="">Category:</label>
             <app-select-input 
                 [listOptions]="listOptionsCategory"
-                [(selectedField)]="selectedCategoryTransaction" 
+                [selectedField]="transaction?.categoryType??'Choose'" 
+                (selectedFieldChange)="categoryTransactionChange($event)"
+                [disabled]="disabledFieldsUpdate"
+                [error]="fieldsError.has('transaction.categoryType') 
+                        && fieldsError.get('transaction.categoryType')? true : false"
+                [errorMsg]="'Choose an option'"
             ></app-select-input>
         </div>
         <div class="input-label">
             <label for="">Name:</label>
-            <input type="text" value="">
+            <p 
+                *ngIf="fieldsError.has('transaction.name') 
+                && fieldsError.get('transaction.name')? true : false"
+                class="text-error-input"
+            >Name cannot be empty and cannot be longer than 50 characters</p>
+            <input 
+                type="text"
+                [ngModel]="transaction?.name"
+                (ngModelChange)="transactionNameChange($event)"
+                [ngClass]="{'input-error': fieldsError.has('transaction.name') 
+                && fieldsError.get('transaction.name')? true : false}">
         </div>
-        <div class="input-label" *ngIf="selectedCategoryTransaction === 'Fixed'">
+        <div class="input-label" *ngIf="transaction?.categoryType === 'Fixed'">
             <label for="">Type Fixed Transaction:</label>
             <app-select-input 
                 [listOptions]="listOptionsTypeFixedTransaction"
-                [(selectedField)]="selectedTypeFixedTransaction" 
+                [selectedField]="fixedTransaction?.type??'Choose'" 
+                (selectedFieldChange)="fixedTypeChange($event)"
+                [disabled]="disabledFieldsUpdate"
+                [error]="fieldsError.has('fixedTransaction.type')
+                    && fieldsError.get('fixedTransaction.type')?true:false"
+                [errorMsg]="'Choose an option'"
             ></app-select-input>
         </div>
         <div 
             class="input-label"
-            *ngIf="selectedCategoryTransaction === 'Fixed'
-                && selectedTypeFixedTransaction != 'Monthly'
-                && selectedTypeFixedTransaction != 'Annual' 
-                && selectedTypeFixedTransaction != 'Weekly'">
-            <label for="">Amount Time: </label>
-            <input type="number" [placeholder]="selectedTypeFixedTransaction">
+            *ngIf="transaction?.categoryType === 'Fixed'
+                && fixedTransaction?.type != 'Monthly'
+                &&  fixedTransaction?.type != 'Annual' 
+                &&  fixedTransaction?.type != 'Weekly'">
+            <label for="">Amount of Time: </label>
+            <p *ngIf="fieldsError.has('fixedTransaction.amountTime')
+                && fieldsError.get('fixedTransaction.amountTime')"
+                class="text-error-input"
+            >Amount of Time cannot be less than one</p>
+            <input 
+                type="number" 
+                [placeholder]="fixedTransaction?.type??''" 
+                [ngClass]="{'input-error': 
+                    fieldsError.has('fixedTransaction.amountTime')
+                    && fieldsError.get('fixedTransaction.amountTime')}"
+                [ngModel]="fixedTransaction?.amountTime"
+                (ngModelChange)="fixedTransactionAmountTimeChange($event)"
+                >
         </div>
-        <div class="input-label" *ngIf="selectedCategoryTransaction === 'Fixed'">
+        <div class="input-label" *ngIf="transaction?.categoryType === 'Fixed'" >
             <label for="">Is Installment?</label>
+            <p *ngIf="fieldsError.has('fixedTransaction.isInstallment')
+                && fieldsError.get('fixedTransaction.isInstallment')"
+                class="text-error-input"
+            >Choose an option</p>
             <div>
                 <label>
-                    <input type="radio" name="isInstallment" [value]="false" [(ngModel)]="isInstallment"> No
+                    <input type="radio" name="isInstallment" [value]="false" 
+                        [ngModel]="fixedTransaction?.isInstallment"
+                        (ngModelChange)="isInstallmentChange($event)"
+                        [disabled]="disabledFieldsUpdate"
+                    > No
                 </label>
             
                 <label>
-                    <input type="radio" name="isInstallment" [value]="true" [(ngModel)]="isInstallment"> Yes
+                    <input type="radio" name="isInstallment" [value]="true" 
+                        [ngModel]="fixedTransaction?.isInstallment"
+                        (ngModelChange)="isInstallmentChange($event)"
+                        [disabled]="disabledFieldsUpdate"
+                    > Yes
                 </label>
             </div>
         </div>
-        <div class="input-label" *ngIf="isInstallment">
+        <div class="input-label" *ngIf="transaction?.categoryType === 'Fixed' && fixedTransaction?.isInstallment" >
             <label for="">The Installments are?</label>
+            <p *ngIf="fieldsError.has('fixedTransaction.typeInstallment')
+                && fieldsError.get('fixedTransaction.typeInstallment')"
+                class="text-error-input"
+            >Choose an option</p>
             <div>
                 <label>
-                    <input type="radio" name="typeInstallment" [value]="'fixed'" [(ngModel)]="typeInstallments"> Fixed
+                    <input type="radio" name="typeInstallment" [value]="'Fixed'" 
+                        [ngModel]="fixedTransaction?.typeInstallment??'Choose'"
+                        (ngModelChange)="typeInstallmentChange($event)"
+                        [disabled]="disabledFieldsUpdate"
+                    > Fixed
                 </label>
-            
                 <label>
-                    <input type="radio" name="typeInstallment" [value]="'variable'" [(ngModel)]="typeInstallments"> Variable
+                    <input type="radio" name="typeInstallment" [value]="'Variable'" 
+                        [ngModel]="fixedTransaction?.typeInstallment??'Choose'"
+                        (ngModelChange)="typeInstallmentChange($event)"
+                        [disabled]="disabledFieldsUpdate"
+                    > Variable
                 </label>
             </div>
         </div>
-        <div class="input-label" *ngIf="isInstallment">
-            <label for="">Amount Installments: </label>
-            <input type="number">
+        <div class="input-label" *ngIf="transaction?.categoryType === 'Fixed' && fixedTransaction?.isInstallment">
+            <label for="">Amount of Installments: </label>
+            <p *ngIf="fieldsError.has('fixedTransaction.amountInstallment')
+                && fieldsError.get('fixedTransaction.amountInstallment')"
+                class="text-error-input"
+            >Amount of Installments cannot be less than two</p>
+            <input 
+                type="number" 
+                [ngClass]="{'input-error': fieldsError.has('fixedTransaction.amountInstallment')
+                && fieldsError.get('fixedTransaction.amountInstallment')}"
+                [ngModel]="fixedTransaction?.amountInstallment"
+                (ngModelChange)="fixedTransactionAmountInstallmentChange($event)"
+                >
         </div>
-        <div class="input-label" *ngIf="selectedCategoryTransaction === 'Eventual'">
-            <label for="">Date of deposit or expenditure:</label>
-            <input type="date" value="">
+        <div class="input-label">
+            <label for="" *ngIf="transaction?.categoryType != 'Fixed'">Date of deposit or expenditure:</label>
+            <label for="" *ngIf="transaction?.categoryType === 'Fixed'">Start Date of deposit or expenditure:</label>
+            <p *ngIf="fieldsError.has('selectedDate')
+                && fieldsError.get('selectedDate')"
+                class="text-error-input"
+            >The Date cannot be less than today</p>
+            <input 
+                type="date" 
+                [(ngModel)]="selectedDate"
+                [ngClass]="{'input-error': fieldsError.has('selectedDate')
+                && fieldsError.get('selectedDate')}">
         </div>
         <div class="input-label">
             <label for="">Total Value:</label>
-            <input type="text" value="">
+            <p *ngIf="fieldsError.has('totalValue')
+                && fieldsError.get('totalValue')"
+                class="text-error-input"
+            >The Total Value cannot be less than one</p>
+            <input 
+                type="number" 
+                required name="price" 
+                min="0" 
+                [(ngModel)]="totalValue"
+                step=".01"
+                [ngClass]="{'input-error': fieldsError.has('totalValue')
+                && fieldsError.get('totalValue')}">
         </div>
     </div>
+    <footer>
+        <button class="btn btn-danger" [routerLink]="'/Registers'">Cancel</button>
+        <button class="btn btn-success" (click)="save()">Save</button>
+    </footer>
 </div>
+
