@@ -1,0 +1,132 @@
+.modal__container-top,
+.modal__container-bottom {
+    position: fixed;
+    z-index: 5;
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.modal__container-bottom {
+    bottom: 0;
+}
+
+.modal__container-top h4,
+.modal__container-bottom h4 {
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+    letter-spacing: 1px;
+    font-weight: 100;
+}
+
+.modal__container-top {
+    height: 80vh;
+}
+
+.modal__content,
+.modal__content-top,
+.modal__content-bottom {
+    background-color: #2c2c2c;
+    margin: 15px;
+    border-radius: 8px;
+    box-shadow: 5px 5px 10px #000000;
+}
+
+.modal__content-top {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    min-height: 100px;
+    max-height: 180px;
+    max-width: 500px;
+}
+
+.modal__content-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 30px;
+}
+
+
+.modal__container-top .modal__content {
+    min-height: 100px;
+}
+
+.modal__container-bottom .modal__content {
+    color: #fff;
+}
+
+.modal__container-bottom .modal__success {
+    background: #10693f;
+}
+
+.modal__container-bottom .modal__error {
+    background: #b11928;
+}
+
+.modal__confirm{
+    display: flex;
+    max-height: 180px;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.content__buttons{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding: 0px 15px 15px 0px;
+}
+
+.content__buttons button{
+    margin-left: 5px;
+}
+
+.content__header{
+    border-bottom: 1px solid #212121;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #e3ba5e;
+}
+
+.content__header h1{
+    margin: 0px 0px 0px 5px;
+    padding: 5px;
+}
+
+.modal__confirm p{
+    padding: 15px 0px 15px 0px;
+    color: #fff;
+    font-weight: 100;
+    margin: 0px;
+    text-align: center;
+}
+
+.modal__confirm fa-icon{
+    font-size: 18px;
+}
+
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}

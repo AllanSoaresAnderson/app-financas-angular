@@ -1,8 +1,22 @@
+#page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
 .container-form{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 30px;
+    background: #262b303b;
+    color: #fff;
+    width: 80%;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px #000000;
+    padding: 20px;
 }
 
 .card-form{
@@ -30,7 +44,7 @@
     padding: 9px;
     text-align: start;
     border: 1px solid gray;
-    border-bottom: 2px solid aqua;
+    border-bottom: 2px solid rgb(0, 187, 187);
     border-radius: 8px;
 }
 
@@ -56,7 +70,51 @@
 }
 
 
+footer{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 40px;
+    justify-content: flex-end;
+}
 
+
+footer button{
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    margin-left: 10px;
+    color: white;
+}
+
+
+
+.input-error:focus, .input-error, .input-error:active{
+    border: 1px solid rgb(179, 45, 45) !important;
+    border-bottom: 2px solid rgb(179, 45, 45)!important;
+}
+
+.text-error-input{
+    color: rgb(179, 45, 45);
+    margin-top: 5px;
+    width: 100%;
+    text-align: start;
+}
+
+
+.container__spinner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    height: 80vh;
+}
+
+
+.container__spinner h2{
+    padding: 15px;
+}
 
 
 

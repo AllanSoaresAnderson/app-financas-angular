@@ -1,0 +1,89 @@
+<button 
+    title="Edit"
+    class="btn btn-primary btn-sm"
+    *ngIf="type === 'Edit'"
+    (click)="onClicked()"
+    type="button"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="Add"
+    class="btn btn-success btn-sm"
+    *ngIf="type === 'Add'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="Delete"
+    class="btn btn-danger btn-sm"
+    *ngIf="type === 'Delete'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="Save"
+    class="btn btn-success btn-sm"
+    *ngIf="type === 'Save'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="Next Page"
+    class="btn btn-success btn-sm"
+    *ngIf="type === 'Next Page'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="Last Page"
+    class="btn btn-success btn-sm"
+    *ngIf="type === 'Last Page'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="Home Page"
+    class="btn btn-success btn-sm button-rotate"
+    *ngIf="type === 'Home Page'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="Previous Page"
+    class="btn btn-success btn-sm"
+    *ngIf="type === 'Previous Page'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="return"
+    class="btn btn-dark btn-sm"
+    *ngIf="type === 'return'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>
+
+<button 
+    title="search"
+    class="btn btn-primary btn-sm"
+    *ngIf="type === 'search'"
+    type="button"
+    (click)="onClicked()"
+    [disabled]="disable"
+><fa-icon [icon]="icon" ></fa-icon></button>

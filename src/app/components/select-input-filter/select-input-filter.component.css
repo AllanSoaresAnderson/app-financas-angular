@@ -2,20 +2,27 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
+}
+
+.select-container:hover button, button:active{
+    background: rgb(80, 80, 80);
+    color: rgba(255, 255, 255, 0.788);
+    border: 1px solid #80808000;
 }
 
 
 button{
-    color: white;
+    color: gray;
     background: none;
     outline: none;
     padding: 9px;
-    text-align: start;
-    border: 1px solid gray;
-    border-bottom: 2px solid rgb(0, 187, 187);
+    text-align: center;
+    border: 1px solid #8080801c;
     border-radius: 8px;
     position: relative;
     z-index: 1;
+    transition: 1s ease-in-out;
 }
 
 ul{

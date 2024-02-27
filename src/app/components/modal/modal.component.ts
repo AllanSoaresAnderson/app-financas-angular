@@ -1,38 +1,60 @@
-import { Component, Inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  MAT_DIALOG_DATA, 
-  MatDialogRef, 
-  MatDialogContent, 
-  MatDialogActions, 
-  MatDialogClose,
- }from "@angular/material/dialog"
-
- import{MatProgressSpinnerModule, ProgressSpinnerMode} from '@angular/material/progress-spinner'
-import { ThemePalette } from '@angular/material/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconDefinition, faCheck, faPen, faSquareCheck, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { CrudButtonsComponent } from "../buttons/crud-buttons/crud-buttons.component";
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [CommonModule, MatDialogContent, MatDialogActions, MatDialogClose, MatProgressSpinnerModule],
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.css'
+  styleUrl: './modal.component.css',
+  imports: [CommonModule, FontAwesomeModule, CrudButtonsComponent]
 })
-export class ModalComponent {
-  // @Input() title: string = 'Modal Title';
-  // @Input() message: string = 'Modal Message';
+export class ModalComponent implements OnInit, AfterViewInit {
 
-  color: ThemePalette = 'primary';
-  mode: ProgressSpinnerMode = 'indeterminate';
+  icon: IconDefinition = faCheck
 
-  constructor(
-    public dialogRef: MatDialogRef<ModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {name: string}
-    ) {}
+  @Input() type: string = 'success-bottom';
+  @Input() messageBody: string = 'Saved Successfully';
+  @Output() signal: EventEmitter<string> = new EventEmitter();
 
+  popUpList: string[] = ['success-bottom', 'error-bottom'];
 
-    closeDialog(){
-      this.dialogRef.close('Pizza!')
+  ngOnInit(): void {
+    this.configView()
+    if (this.popUpList.includes(this.type)) {
+      setTimeout(() => {
+        this.buttonEmit('close');
+      }, 2000);
     }
+  }
+
+  ngAfterViewInit(): void {
+
+  }
+
+
+  configView() {
+    switch (this.type) {
+      case 'success-bottom':
+        this.icon = faCheck;
+        break;
+      case 'error-bottom':
+        this.icon = faTriangleExclamation;
+        break;
+      case 'confirm-delete':
+        this.icon = faTriangleExclamation;
+        break;
+      default:
+        this.icon = faCheck;
+    }
+  }
+
+
+  buttonEmit(msg: string){
+    this.signal.emit(msg)
+  }
+
 
 }

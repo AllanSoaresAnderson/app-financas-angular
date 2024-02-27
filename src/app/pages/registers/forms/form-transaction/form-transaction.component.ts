@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SelectInputComponent } from "../../../../components/select-input/select-input.component";
 import { FormsModule } from '@angular/forms';
-import { EventualTransaction } from '../../../../entities/EventualTransaction';
-import { FixedTransaction } from '../../../../entities/FixedTransaction';
-import { Transactions } from '../../../../entities/Transactions';
+import { EventualTransaction } from '../../../../models/EventualTransaction';
+import { FixedTransaction } from '../../../../models/FixedTransaction';
+import { Transactions } from '../../../../models/Transactions';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -34,16 +34,37 @@ export class FormTransactionComponent implements OnInit {
 
   @Input()
   transaction?:Transactions;
-
+  @Input()
+  crudOptions:string = 'create'
+  @Output() 
+  signalButton: EventEmitter<string>= new EventEmitter();
  
   
   ngOnInit(): void {
+    switch(this.crudOptions){
+      case 'create':
+        this.transaction = new Transactions();
+        this.transaction.type = 'Expense';
+        this.transaction.name = '';
+        this.disabledFieldsUpdate = false;
+        break;
+      case 'update':
+        this.disabledFieldsUpdate = true
+        break;
+      default:
+        this.crudOptions = 'create'
+        this.transaction = new Transactions();
+        this.transaction.type = 'Expense';
+        this.transaction.name = '';
+        this.disabledFieldsUpdate = false;
+    }
+
     if(this.transaction === undefined || this.transaction === null){
       this.transaction = new Transactions();
       this.transaction.type = 'Expense';
       this.transaction.name = '';
-    }else{
-      this.disabledFieldsUpdate = true;
+      this.crudOptions = 'create'
+      this.disabledFieldsUpdate = false;
     }
   }
 
@@ -101,9 +122,7 @@ export class FormTransactionComponent implements OnInit {
       return false;
     }
     this.transaction.name = this.transaction.name?.trim()
-    if(this.transaction.name === '' 
-    || this.transaction.name === undefined
-    || this.transaction.name?.length > 50){
+    if(!this.transaction.name|| this.transaction.name?.length > 50){
       this.fieldsError.set('transaction.name', true);
       return false;
     }
@@ -247,6 +266,10 @@ export class FormTransactionComponent implements OnInit {
     if(this.fixedTransaction != undefined && this.fixedTransaction != null){
       this.fixedTransaction.amountInstallment = event
     }
+  }
+
+  buttonEmit(signal:string){
+    this.signalButton.emit(signal)
   }
 
 

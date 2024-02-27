@@ -1,0 +1,16 @@
+<div class="select-container">
+    <button 
+        type="submit"
+        (click)="openOptions()" 
+        [disabled]="disabled"
+        [ngClass]="{'error': error}"
+    >{{selectedField}}</button>
+    <ul *ngIf="optionsOpened">
+        <li *ngFor="let option of listOptions"
+            (click)="selectOption(option)"
+            [ngClass]="{'listActive': selectedField === option}"
+        >{{option}}</li>
+    </ul>
+    <p *ngIf="error">{{errorMsg}}</p>
+</div>
+

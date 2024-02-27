@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { FormTransactionComponent } from './pages/registers/forms/form-transaction/form-transaction.component';
-import { FormEntityComponent } from './pages/registers/forms/form-entity/form-entity.component';
-import { FormProductsComponent } from './pages/registers/forms/form-products/form-products.component';
 import { RegistersComponent } from './pages/registers/registers.component';
+import { TransactionComponent } from './pages/registers/views-entities/transaction/transaction.component';
+import { EntityComponent } from './pages/registers/views-entities/entity/entity.component';
+import { ProductComponent } from './pages/registers/views-entities/product/product.component';
 
 
 export const routes: Routes = [
     { path: "", component: HomeComponent, pathMatch: 'full'},
     { path: "Registers", component: RegistersComponent, pathMatch: 'full'},
-    { path: "Registers/Transactions", component: FormTransactionComponent, pathMatch: 'full'},
-    { path: "Registers/Entities", component: FormEntityComponent, pathMatch: 'full'},
-    { path: "Registers/Products", component: FormProductsComponent, pathMatch: 'full'},
+    { path: "Registers/Transactions", component: TransactionComponent, pathMatch: 'full'},
+    { path: "Registers/Entities", component: EntityComponent, pathMatch: 'full'},
+    { path: "Registers/Products", component: ProductComponent, pathMatch: 'full'},
     { path: "**", component: HomeComponent},
     { path: "",   redirectTo: '', pathMatch: 'full' }
 ];

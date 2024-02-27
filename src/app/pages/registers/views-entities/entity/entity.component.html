@@ -1,0 +1,167 @@
+<app-modal *ngIf="openModal" [@modalInOut] 
+    (signal)="readSignalModal($event)"
+    [type]="typeModal"
+    [messageBody]="msgModal"
+></app-modal>
+
+
+<div *ngIf="!isLoading; else spinner">
+    <div *ngIf="crudState === 'read'; else form" [@fadeInOut]>
+        <crud-buttons type="return" routerLink="/Registers" class="button-return"></crud-buttons>
+        <div class="container-page">
+            <div class="card__container">
+                <div class="card-header__container">
+                    <ul class="">
+                        <li class="">
+                            <button [disabled]="disablePage">General</button>
+                        </li>
+                    </ul>
+
+                    <crud-buttons 
+                        type="Add" 
+                        class="mx-4" 
+                        (clicked)="crudOptions('add')"
+                        [disable]="disablePage"
+                    ></crud-buttons>
+
+                </div>
+                <div class="body__container">
+                    <h3 class="">Entities</h3>
+                    <div class="table__container">
+                        <!--Table Expenses-->
+                        <table class="">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">is Person?</th>
+                                    <th scope="col">Quantiy of Earnings</th>
+                                    <th scope="col">Quantity of Expenses</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table__row" *ngFor="let entity of listEntities">
+                                    <td>
+                                        <crud-buttons 
+                                            type="Delete" 
+                                            (clicked)="openConfirmModal('delete', entity.id)"
+                                            [disable]="disablePage"
+                                        ></crud-buttons>
+                                        <crud-buttons 
+                                            type="Edit" 
+                                            (clicked)="updateEntity(entity.id)" 
+                                            class="ml-1" 
+                                            [disable]="disablePage"
+                                        ></crud-buttons>
+                                    </td>
+                                    <td>
+                                        {{entity.name}}
+                                    </td>
+                                    <td>
+                                        {{entity.isPerson}}
+                                    </td>
+                                    <td>
+                                        {{entity.quantityExpenses}}
+                                    </td>
+                                    <td class="">
+                                        {{entity.quantityEarnings}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table> <!--Table Expenses-->
+                    </div>
+
+                </div>
+            </div>
+            <!--Paginacao-->
+            <footer class="card__container">
+                <div class="card-header__controller">
+                    <div>
+                        <crud-buttons 
+                            type="Home Page" 
+                            class="pagination-right" 
+                            [disable]="disablePage"
+                            (clicked)="startPage()"
+                            ></crud-buttons>
+                        <crud-buttons 
+                            type="Previous Page" 
+                            class="pagination-right" 
+                            [disable]="disablePage"
+                            (clicked)="previousPage()"
+                        ></crud-buttons>
+                    </div>
+                    <h2>Controller</h2>
+                    <div>
+                        <crud-buttons 
+                            type="Next Page" 
+                            class="pagination-left" 
+                            [disable]="disablePage"
+                            (clicked)="nextPage()"
+                            ></crud-buttons>
+                        <crud-buttons 
+                            type="Last Page" 
+                            class="pagination-left" 
+                            [disable]="disablePage"
+                            (clicked)="endPage()"
+                            ></crud-buttons>
+                    </div>
+
+                </div>
+                <div class="body__controller">
+                    <input type="text" [(ngModel)]="filterName" id="filter-name" placeholder="Filter By Name...">
+                    <div class="container__radio-filter">
+                        <label for="">Type: </label>
+                        <div class="container__input-radio">
+                            <label>
+                                <input 
+                                    type="radio" 
+                                    name="type" 
+                                    [value]="null"
+                                    [(ngModel)]="filterType"
+                                    [disabled]="disablePage">
+                                All
+                            </label>
+                            <label>
+                                <input 
+                                    type="radio" 
+                                    name="type" 
+                                    [value]="true"
+                                    [(ngModel)]="filterType"
+                                    [disabled]="disablePage">
+                                Person
+                            </label>
+                            <label>
+                                <input 
+                                    type="radio" 
+                                    name="type" 
+                                    [value]="false"
+                                    [(ngModel)]="filterType"
+                                    [disabled]="disablePage">
+                                Not a Person
+                            </label>
+                        </div>
+                    </div>
+                    <crud-buttons type="search" [disable]="disablePage" (clicked)="getListEntities()"></crud-buttons>
+                </div>
+
+            </footer><!--Fim Paginacao-->
+        </div>
+    </div>
+
+    <ng-template #form>
+        <app-form-entity 
+            [@fadeInOut] 
+            (signal)="readSignalForm($event)"
+            [typeOperation]="crudState"
+            [id]="idEntitySelected"
+        ></app-form-entity>
+    </ng-template>
+</div>
+
+<ng-template #spinner>
+    <div class="container__spinner">
+        <mat-spinner></mat-spinner>
+        <h2>Aguarde alguns segundos enquanto estamos salvando..</h2>
+    </div>
+</ng-template>

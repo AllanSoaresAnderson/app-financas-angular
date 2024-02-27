@@ -1,20 +1,57 @@
-<div class="container-form">
-    <div class="card-form">
-        <div class="input-label">
-            <label for="">Name: </label>
-            <input type="text">
-        </div>
-        <div class="input-label">
-            <label for="">Is a Person?</label>
-            <div>
-                <label>
-                    <input type="radio" name="isPerson" [value]="false" [(ngModel)]="isPerson"> No
-                </label>
-            
-                <label>
-                    <input type="radio" name="isPerson" [value]="true" [(ngModel)]="isPerson"> Yes
-                </label>
+<app-modal *ngIf="openModal" [@fadeInOut] 
+    (signal)="readSignalModal($event)"
+    [type]="typeModal"
+    [messageBody]="msgModal"
+></app-modal>
+
+<div id="page" *ngIf="showComponent === 'main'" [@fadeInOut]>
+    <div class="container-form">
+        <div class="card-form">
+            <div class="input-label">
+                <label for="">Name: </label>
+                <p 
+                    *ngIf="fieldsError.has('entity.name') 
+                    && fieldsError.get('entity.name')? true : false"
+                    class="text-error-input"
+                >Name cannot be empty and cannot be longer than 50 characters</p>
+                <input type="text" [(ngModel)]="entity.name"
+                    [ngClass]="{'input-error': fieldsError.has('entity.name') 
+                    && fieldsError.get('entity.name')? true : false}">
+            </div>
+            <div class="input-label">
+                <label for="">Is a Person?</label>
+                <p *ngIf="fieldsError.has('entity.isPerson')
+                    && fieldsError.get('entity.isPerson')"
+                    class="text-error-input"
+                >Choose an option</p>
+                <div>
+                    <label>
+                        <input type="radio" name="isPerson" [value]="false" [(ngModel)]="entity.isPerson"> No
+                    </label>
+                
+                    <label>
+                        <input type="radio" name="isPerson" [value]="true" [(ngModel)]="entity.isPerson"> Yes
+                    </label>
+                </div>
             </div>
         </div>
+        <footer>
+            <button class="btn btn-danger" (click)="buttonEmit('cancel')">Cancel</button>
+            <button class="btn btn-success" (click)="save()">Save</button>
+        </footer>
     </div>
 </div>
+
+
+<div class="container__spinner" *ngIf="showComponent === 'spinner'" [@fadeInOut]>
+    <mat-spinner></mat-spinner>
+    <h2 class="mt-1">Aguarde por alguns segundos..</h2>
+</div>
+
+
+
+
+
+
+
+

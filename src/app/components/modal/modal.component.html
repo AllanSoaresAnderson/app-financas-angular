@@ -1,14 +1,38 @@
-<h2 mat-dialog-title>Delete all elements?</h2>
-<mat-dialog-content>This will delete all elements that are currently on this page and cannot be undone.</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
-  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-  <button mat-button [mat-dialog-close]="true">Delete</button>
-</mat-dialog-actions>
+<div class="modal__container-top" *ngIf="type === 'confirm-delete'"> 
+    <div class="modal__content-top modal__content modal__confirm">
+        <div class="content__header">
+            <fa-icon [icon]="icon" ></fa-icon>
+            <h1>Warning</h1>
+        </div>
+        <p>{{messageBody}}</p>
+        <div class="content__buttons">
+            <button class="btn btn-danger btn-sm" (click)="buttonEmit('close')">Cancel</button>
+            <button class="btn btn-success btn-sm" (click)="buttonEmit('confirm')">Confirm</button>
+        </div>
+    </div>
+</div> 
 
-<mat-progress-spinner
-class="example-margin"
-[color]="color"
-[mode]="mode"
->
-</mat-progress-spinner>
+
+<!--Modal Bottom Error-->
+<div class="modal__container-bottom" *ngIf="type === 'error-bottom'"> 
+    <div class="modal__content-bottom modal__content modal__error">
+        <fa-icon [icon]="icon" ></fa-icon>
+        <h4>{{messageBody}}</h4>
+    </div>
+</div> 
+<!--Modal Bottom Error-->
+
+<!--Modal Bottom Saved-->
+<div class="modal__container-bottom" *ngIf="type === 'success-bottom'"> 
+    <div class="modal__content-bottom modal__content modal__success">
+        <fa-icon [icon]="icon" ></fa-icon>
+        <h4>{{messageBody}}</h4>
+    </div>
+</div> 
+<!--Modal Bottom Saved-->
+
+<!-- <div class="modal__container-top">
+    <div class="modal__content-top modal__content">
+        <h2>Saved Successfully</h2>
+    </div>
+</div> -->

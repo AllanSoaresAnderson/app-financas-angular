@@ -1,30 +1,68 @@
-<div class="container-form">
-    <div class="card-form">
-        <div class="input-label">
-            <label for="">Type:</label>
-            <app-select-input 
-                [listOptions]="listProductType"
-                [(selectedField)]="selectedProductType" 
+<div id="page">
+    <div class="container-form">
+        <div class="card-form">
+            <div class="input-label">
+                <label for="">Type:</label>
+                <app-select-input 
+                    [listOptions]="listProductType"
+                    [(selectedField)]="selectedProductType"
+                    [error]="fieldsError.has('selectedProductType') 
+                        && fieldsError.get('selectedProductType')? true : false"
+                    [errorMsg]="'Choose an option'"
+                ></app-select-input>
+            </div>
+            <div class="input-label">
+                <label for="">Name:</label>
+                <p 
+                *ngIf="fieldsError.has('product.name') 
+                && fieldsError.get('product.name')? true : false"
+                class="text-error-input"
+                >Name cannot be empty and cannot be longer than 50 characters</p>
+                <input type="text"
+                [(ngModel)]="product.name"
+                [ngClass]="{'input-error': fieldsError.has('product.name') 
+                && fieldsError.get('product.name')? true : false}"
+                >
+            </div>
+            <div class="input-label">
+                <label for="">Value type:</label>
+                <app-select-input 
+                [listOptions]="listValueType"
+                [(selectedField)]="selectedValueType" 
+                [error]="fieldsError.has('selectedValueType') 
+                && fieldsError.get('selectedValueType')? true : false"
+                [errorMsg]="'Choose an option'"
             ></app-select-input>
+            </div>
+            <div class="input-label">
+                <label for="">Value</label>
+                <p 
+                *ngIf="fieldsError.has('value') 
+                && fieldsError.get('value')? true : false"
+                class="text-error-input"
+                >Value cannot be empty and cannot be less than $ 1,00</p>
+                <input type="number" [placeholder]="selectedValueType" min="0" step=".01" [(ngModel)]="value"
+                [ngClass]="{'input-error': fieldsError.has('value') 
+                && fieldsError.get('value')? true : false}"
+                >
+            </div>
+            <div class="input-label" *ngIf="selectedValueType === 'Total Value'">
+                <label for="">Quantity of units:</label>
+                <p 
+                *ngIf="fieldsError.has('quantityUnits') 
+                && fieldsError.get('quantityUnits')? true : false"
+                class="text-error-input"
+                >Quantity Units cannot be empty and cannot be less than one</p>
+                <input type="number" [(ngModel)]="quantityUnits"
+                [ngClass]="{'input-error': fieldsError.has('quantityUnits') 
+                && fieldsError.get('quantityUnits')? true : false}"
+                >
+            </div>
         </div>
-        <div class="input-label">
-            <label for="">Name:</label>
-            <input type="text">
-        </div>
-        <div class="input-label">
-            <label for="">Value type:</label>
-            <app-select-input 
-            [listOptions]="listValueType"
-            [(selectedField)]="selectedValueType" 
-        ></app-select-input>
-        </div>
-        <div class="input-label">
-            <label for="">Value</label>
-            <input type="text" [placeholder]="selectedValueType">
-        </div>
-        <div class="input-label">
-            <label for="">Quantity of units:</label>
-            <input type="number">
-        </div>
+        <footer>
+            <button class="btn btn-danger" (click)="buttonEmit('cancel')">Cancel</button>
+            <button class="btn btn-success" (click)="save()">Save</button>
+        </footer>
     </div>
+
 </div>

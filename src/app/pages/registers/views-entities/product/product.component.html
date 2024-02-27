@@ -1,0 +1,83 @@
+<div *ngIf="crudState === 'read'" [@fadeInOut]>
+    <header>
+        <crud-buttons type="return" routerLink="/Registers"></crud-buttons>
+    </header>
+    <div class="container-page" >
+        <div class="card__container" >
+            <div class="card-header__container">
+                <crud-buttons type="Add" class="mx-4" (clicked)="crudOptions('create')"></crud-buttons>
+            </div>
+            <div class="body__container">
+                <h3 class="">Products</h3>
+                <div class="table__container">
+                    <!--Table Expenses-->
+                    <table class="">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Unit Value</th>
+                            </tr>   
+                        </thead>
+                        <tbody>
+                            <tr class="table__row" *ngFor="let transaction of listTransactions">
+                                <td>
+                                    <crud-buttons type="Delete"></crud-buttons>
+                                    <crud-buttons type="Edit" class="ml-1"></crud-buttons>
+                                </td>
+                                <td>
+                                    {{transaction.name}}
+                                </td>
+                                <td>
+                                    {{transaction.type}}
+                                </td>
+                            </tr>
+                        </tbody>
+    
+                    </table> <!--Table Expenses-->
+                </div>
+    
+            </div>
+        </div>
+        <!--Paginacao-->
+        <footer class="card__container">
+            <div class="card-header__controller">
+                <div>
+                    <crud-buttons type="Home Page" class="pagination-right"></crud-buttons>
+                    <crud-buttons type="Previous Page" class="pagination-right"></crud-buttons>
+                </div>
+                <h2>Controller</h2>
+                <div>
+                    <crud-buttons type="Next Page" class="pagination-left"></crud-buttons>
+                    <crud-buttons type="Last Page" class="pagination-left"></crud-buttons>
+                </div>
+    
+            </div>
+            <div class="body__controller">
+                <!-- <div class="input-filter__container">
+                    <label for="filter-date">From:</label>
+                    <input type="date" [(ngModel)]="filterDate"     id="filter-date">
+                </div>
+                <input type="text" [(ngModel)]="filterName" id="filter-name" placeholder="Filter By Name...">
+                <app-select-input-filter 
+                    [listOptions]="listFilterType"
+                    [selectedField]="filterTypeSelected" 
+                    (selectedFieldChange)="filterTypeSelected = $event"
+                ></app-select-input-filter>
+                <app-select-input-filter 
+                    [listOptions]="listFilterEntity"
+                    [selectedField]="filterEntitySelected" 
+                    (selectedFieldChange)="filterEntitySelected = $event"
+                ></app-select-input-filter> -->
+            </div>
+    
+        </footer><!--Fim Paginacao-->
+    </div>
+</div>
+
+
+<app-form-products 
+    *ngIf="crudState !== 'read'" 
+    [@fadeInOut]
+    (signalButton)="readSignalButton($event)"
+></app-form-products>
