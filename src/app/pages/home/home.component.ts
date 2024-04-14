@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CardComponent } from "../../components/card/card.component";
-import { MenuBarComponent } from "../../components/menu-bar/menu-bar.component";
 import { PaymentCardComponent } from "../../components/payment-card/payment-card.component";
 import { SideBarComponent } from "../../components/side-bar/side-bar.component";
 import { MenuTopComponent } from "../../components/menu-top/menu-top.component";
@@ -14,7 +13,7 @@ import { transition, trigger, state, style, animate} from '@angular/animations'
     standalone: true,
     templateUrl: './home.component.html',
     styleUrl: './home.component.css',
-    imports: [CommonModule, MenuBarComponent, PaymentCardComponent, SideBarComponent, CardComponent, MatDialogModule, MenuTopComponent, FlipCardComponent],
+    imports: [CommonModule, PaymentCardComponent, SideBarComponent, CardComponent, MatDialogModule, MenuTopComponent, FlipCardComponent],
     animations:[
         trigger('btnState', [
             state('inactive', style(

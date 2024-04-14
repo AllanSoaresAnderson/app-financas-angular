@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectInputComponent } from "../../../../components/select-input/select-input.component";
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Entities } from '../../../../models/Entities';
 import { MaterialsModule } from '../../../../module/angular.material.module';
 import { ModalComponent } from "../../../../components/modal/modal.component";
@@ -10,6 +10,9 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { RegistersService } from '../../services/registers.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
+import { FormPage } from '../../../global/crud-page/form-page';
+import { MessagePageService } from '../../../../services/message-page.service';
+
 
 @Component({
   selector: 'app-form-entity',
@@ -26,54 +29,27 @@ import { finalize } from 'rxjs';
   ],
   imports: [FormsModule, SelectInputComponent, CommonModule, RouterModule, MaterialsModule, ModalComponent]
 })
-export class FormEntityComponent implements OnInit {
-  constructor(private service: RegistersService) { }
+export class FormEntityComponent extends FormPage implements OnInit {
+  constructor(
+    private service: RegistersService,
+    protected override messagePageService: MessagePageService,
+    private route: ActivatedRoute,
+    protected override router: Router
+  ) { super(messagePageService, router); }
 
   ngOnInit(): void {
-    if (this.id != null) {
-      this.typeOperation = 'update';
-      this.getEntityById(this.id);
-    }else{
-      this.typeOperation = 'add';
-      this.entity = new Entities();
-    }
+    this.route.params.subscribe(params => {
+      if (params['id']) this.id = params['id'];
+      this.verifyUpdateOrCreate();
+    });
   }
-
-  fieldsError: Map<string, boolean> = new Map();
-  showComponent: string = 'main';
-  openModal: boolean = false;
-  typeModal: string = 'success-bottom';
-  msgModal: string = 'An error has ocurred';
+  
+  override id: number | null = null;
   entity: Entities = new Entities();
-
-  @Input() typeOperation: string = 'add';
-  @Input() id: number | null = null;
-  @Output() signal: EventEmitter<string> = new EventEmitter();
+  override pathReturn: string = '/entities';
 
 
-  buttonEmit(signal: string) {
-    this.signal.emit(signal)
-  }
-
-  save() {
-    this.fieldsError = new Map();
-    if (this.validateFields()) {
-      this.showComponent = 'spinner';
-      switch (this.typeOperation) {
-        case 'add':
-          this.entity.id = null;
-          this.addNewEntity(this.entity);
-          break;
-        case 'update':
-          this.updateEntity(this.entity);
-          break;
-      }
-
-
-    }
-  }
-
-  validateFields(): boolean {
+  override validateFields(): boolean {
     if (!this.entity.name || this.entity.name.trim().length > 50 || this.entity.name.trim().length < 3) {
       this.fieldsError.set('entity.name', true);
       return false;
@@ -85,88 +61,66 @@ export class FormEntityComponent implements OnInit {
     return true
   }
 
-  addNewEntity(entity: Entities) {
-    this.service.addEntity(entity)
-      .pipe(
-        finalize(
-          () => {
-            this.showComponent = 'main';
-          }
-        )
-      )
+  override add(): void {
+    this.isLoading = true;
+    this.service.addEntity(this.entity)
+      .pipe(finalize(() => { this.isLoading = false; }))
       .subscribe(
         {
           next: () => {
-            this.signal.emit('saved');
-          },
-          error: (errorResponse: HttpErrorResponse) => {
-            const statusCode = errorResponse.status;
-            switch (statusCode) {
-              case 500:
-                this.msgModal = 'An error has ocurred. Internal Server error';
-                break;
-              case 400:
-                this.msgModal = 'Error: Please check the information and try again'
-                break;
-              default:
-                this.msgModal = 'An error has ocurred';
-            }
-            this.openModal = true;
-          }
-        }
-      )
-  }
-
-  readSignalModal(event: string) {
-    switch (event) {
-      case 'close':
-        this.openModal = false;
-        break;
-    }
-  }
-
-  getEntityById(id: number) {
-    if (id) {
-      this.showComponent = 'spinner';
-      this.service.getEntityById(id).pipe(
-        finalize(
-          () => {
-            this.showComponent = 'main';
-          }
-        )
-      ).subscribe(
-        {
-          next: (entity: Entities) => {
-            this.entity = entity;
+            this.showMessageSaved();
+            this.return();
           },
           error: (error: HttpErrorResponse) => {
-            this.signal.emit(`[${error.status}] An error has ocurred`);
+            this.messagePageService.openModalHttpErrorGeneric(error);
+            this.return();
           }
         }
       )
+  }
+
+  override update(): void {
+    this.service.updateEntity(this.entity)
+      .pipe(finalize(() => { this.isLoading = false; }))
+      .subscribe(
+        {
+          next: () => {
+            this.showMessageSaved();
+            this.return();
+          },
+          error: (error: HttpErrorResponse) => {
+            this.messagePageService.openModalHttpErrorGeneric(error);
+            this.return();
+          }
+        }
+      )
+  }
+
+  override getById(): void {
+    if (this.id) {
+      this.service.getEntityById(this.id!)
+        .pipe(finalize(() => { this.isLoading = false; }))
+        .subscribe(
+          {
+            next: (entity: Entities) => { this.entity = entity; },
+            error: (error: HttpErrorResponse) => {
+              this.messagePageService.openModalHttpErrorGeneric(error);
+              this.return();
+            }
+          }
+        )
     } else {
-      this.signal.emit('cancel');
+      this.showMessageErrorGeneric();
+      this.return();
     }
   }
 
-  updateEntity(entity: Entities) {
-    this.service.updateEntity(entity).pipe(
-      finalize(
-        ()=>{
-          this.showComponent = 'main';
-        }
-      )
-    ).subscribe(
-      {
-        next:()=>{
-          this.signal.emit('saved');
-        },
-        error:(error:HttpErrorResponse)=>{
-          this.signal.emit(`[${error.status}] An error has ocurred`);
-        }
-      }
-    )
+  override cleanRegister(): void {
+    this.entity = new Entities();
   }
 
+  override configPageAdd(): void {
+    this.cleanRegister();
+  }
 
 }

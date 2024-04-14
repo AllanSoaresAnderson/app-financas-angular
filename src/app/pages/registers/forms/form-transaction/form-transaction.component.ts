@@ -1,198 +1,208 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SelectInputComponent } from "../../../../components/select-input/select-input.component";
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { finalize } from 'rxjs';
+import { SelectInputComponent } from "../../../../components/select-input/select-input.component";
+import { Entities } from '../../../../models/Entities';
 import { EventualTransaction } from '../../../../models/EventualTransaction';
 import { FixedTransaction } from '../../../../models/FixedTransaction';
 import { Transactions } from '../../../../models/Transactions';
-import { RouterModule } from '@angular/router';
+import { MessagePageService } from '../../../../services/message-page.service';
+import { FormPage } from '../../../global/crud-page/form-page';
+import { RegistersService } from '../../services/registers.service';
 
 @Component({
-    selector: 'app-form-transaction',
-    standalone: true,
-    templateUrl: './form-transaction.component.html',
-    styleUrl: './form-transaction.component.css',
-    imports: [CommonModule, SelectInputComponent, FormsModule, RouterModule],
+  selector: 'app-form-transaction',
+  standalone: true,
+  templateUrl: './form-transaction.component.html',
+  styleUrl: './form-transaction.component.css',
+  imports: [CommonModule, SelectInputComponent, FormsModule, RouterModule],
 })
-export class FormTransactionComponent implements OnInit {
+export class FormTransactionComponent extends FormPage implements OnInit {
+  override pathReturn: string = '/transactions';
 
-  transactionType:string[]= ['Expense', 'Earning']
-  listEntities:string[] = ['Júlia', 'Carro', 'Filhos', 'Me']
-  selectedEntity:string = 'Me';
-  listOptionsCategory: string[] = ['Fixed', 'Eventual'];
-  listOptionsTypeFixedTransaction : string[] = [ 'Monthly', 'Annual', 'Weekly', 'Amount of Years', 'Amount of Months', 'Amount of Weeks', 'Amount of Days']
+  constructor(
+    private service: RegistersService,
+    private route: ActivatedRoute,
+    protected override router: Router,
+    protected override messagePageService: MessagePageService) { super(messagePageService, router) }
 
-  fieldsError: Map<string, boolean> = new Map();
-
-  fieldError?:string;
-  
-  totalValue: number = 0;
-  eventualTransaction?:EventualTransaction;
-  fixedTransaction?:FixedTransaction;
-  selectedDate?:string;
-  disabledFieldsUpdate:boolean = false;
-
-  @Input()
-  transaction?:Transactions;
-  @Input()
-  crudOptions:string = 'create'
-  @Output() 
-  signalButton: EventEmitter<string>= new EventEmitter();
- 
-  
   ngOnInit(): void {
-    switch(this.crudOptions){
-      case 'create':
-        this.transaction = new Transactions();
-        this.transaction.type = 'Expense';
-        this.transaction.name = '';
-        this.disabledFieldsUpdate = false;
-        break;
-      case 'update':
-        this.disabledFieldsUpdate = true
-        break;
-      default:
-        this.crudOptions = 'create'
-        this.transaction = new Transactions();
-        this.transaction.type = 'Expense';
-        this.transaction.name = '';
-        this.disabledFieldsUpdate = false;
-    }
-
-    if(this.transaction === undefined || this.transaction === null){
-      this.transaction = new Transactions();
-      this.transaction.type = 'Expense';
-      this.transaction.name = '';
-      this.crudOptions = 'create'
-      this.disabledFieldsUpdate = false;
-    }
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.isEditing = true;
+        this.id = params['id'];
+      } else {
+        this.isEditing = false;
+        this.selectedDate = this.formatDate(new Date());
+      }
+      this.verifyUpdateOrCreate();
+    });
   }
 
-  save(){
-    this.fieldsError = new Map();
-    if(this.validateFields()){
-      
-    }
-  }
+  @Input() override id: number | null = null;
 
-  validateFields(): boolean{
-    if(!this.validateFieldsTransaction()){
+  transaction: Transactions = new Transactions();
+  selectedDate: string = '';
+  totalValue: number = 0;
+
+  listTransactionType: string[] = ['Expense', 'Earning']
+  listOptionsTypeFixedTransaction: string[] = ['Monthly', 'Annual', 'Weekly', 'Amount of Years', 'Amount of Months', 'Amount of Weeks', 'Amount of Days']
+  listOptionsCategory: string[] = ['Fixed', 'Eventual'];
+  listEntities: Entities[] = [];
+
+  fieldsDisable: Map<string, boolean> = new Map();
+
+
+  override validateFields(): boolean {
+    this.constructTransaction();
+    if (!this.validateFieldsTransaction()) {
       return false;
     }
-    if(this.transaction?.categoryType === 'Fixed'
-      && !this.validateFieldsFixedTransaction()){
+    if (this.transaction.categoryType === 'Fixed'
+      && !this.validateFieldsFixedTransaction()) {
       return false;
     }
-    if(this.transaction?.categoryType === 'Eventual'
-      && !this.validateFieldsEventualTransaction()){
-        return false;
+    if (this.transaction.categoryType === 'Eventual'
+      && !this.validateFieldsEventualTransaction()) {
+      return false;
     }
     return true;
   }
 
-  validateFieldsEventualTransaction(): boolean{
-    if(this.eventualTransaction === undefined 
-      || this.eventualTransaction === null){
-        return false;
+  override add(): void {
+    this.service.addTransaction(this.transaction).subscribe(
+      {
+        next: () => { this.showMessageSaved() },
+        error: (errorResponse: HttpErrorResponse) => { this.showErrorHTTP(errorResponse) }
       }
-      if(this.selectedDate === undefined
-        || new Date(this.selectedDate) < new Date()){
-        this.fieldsError.set('selectedDate', true);
-        return false;
-      }
-    if(this.totalValue < 1){
+    )
+  }
+
+  override update(): void {
+
+  }
+
+  override getById(): void {
+    this.disabledFieldsUpdate = true;
+    if (this.id) {
+      // this.showComponent = 'spinner';
+      this.isLoading = true;
+      this.service.getTransactionById(this.id)
+        .pipe(
+          finalize(
+            () => {
+              this.isLoading = false;
+            }
+          )
+        )
+        .subscribe(
+          {
+            next: (transaction: Transactions) => { this.transaction = transaction },
+            error: (error: HttpErrorResponse) => { this.showErrorHTTP(error) }
+          }
+        )
+    } else { this.showMessageErrorGeneric() }
+  }
+
+  override cleanRegister(): void {
+    this.transaction = new Transactions();
+    this.transaction.type = 'Expense';
+    this.transaction.fixedTransaction = new FixedTransaction();
+    this.transaction.eventualTransaction = new EventualTransaction();
+    this.transaction.entity = new Entities();
+    this.disabledFieldsUpdate = false;
+  }
+
+  validateFieldsEventualTransaction(): boolean {
+    if (this.selectedDate === undefined
+      || new Date(this.selectedDate) < new Date()) {
+      this.transaction.eventualTransaction.date = new Date(this.selectedDate);
+      this.fieldsError.set('selectedDate', true);
+      return false;
+    }
+    if (this.totalValue < 1) {
+      this.transaction.fixedTransaction.value = this.totalValue
       this.fieldsError.set('totalValue', true);
       return false;
     }
     return true;
   }
 
-
-  validateFieldsTransaction(): boolean{
-    if(this.transaction === undefined || this.transaction === null){
-      return false;
-    }
-    if(this.transaction.type !== 'Expense' && this.transaction.type !== 'Earning'){
+  validateFieldsTransaction(): boolean {
+    if (this.transaction.type !== 'Expense' && this.transaction.type !== 'Earning') {
       this.fieldsError.set('transaction.type', true);
       return false;
-    } 
-
-    if(this.transaction.categoryType !== 'Fixed' && this.transaction.categoryType !== 'Eventual'){
+    }
+    if (this.transaction.categoryType !== 'Fixed' && this.transaction.categoryType !== 'Eventual') {
       this.fieldsError.set('transaction.categoryType', true);
       return false;
     }
-    this.transaction.name = this.transaction.name?.trim()
-    if(!this.transaction.name|| this.transaction.name?.length > 50){
+    this.transaction.name = this.transaction.name.trim()
+    if (!this.transaction.name || this.transaction.name?.length > 50) {
       this.fieldsError.set('transaction.name', true);
       return false;
     }
     return true;
   }
 
-
-  validateFieldsFixedTransaction():boolean{
-    if(this.fixedTransaction === undefined || this.fixedTransaction === null){
+  validateFieldsFixedTransaction(): boolean {
+    if (!this.validateTypeFixedTransaction()) {
       return false;
-    }
-    if(!this.validateTypeFixedTransaction()){
-      return false;
-    }else{
-      if(
-        (this.fixedTransaction.type === 'Amount of Years'
-          || this.fixedTransaction.type === 'Amount of Months'
-          || this.fixedTransaction.type === 'Amount of Weeks'
-          || this.fixedTransaction.type === 'Amount of Days')
-      && 
-        (this.fixedTransaction.amountTime === undefined 
-          ||this.fixedTransaction.amountTime < 1)
-      ){
+    } else {
+      if (
+        (this.transaction.fixedTransaction.type === 'Amount of Years'
+          || this.transaction.fixedTransaction.type === 'Amount of Months'
+          || this.transaction.fixedTransaction.type === 'Amount of Weeks'
+          || this.transaction.fixedTransaction.type === 'Amount of Days')
+        &&
+        (this.transaction.fixedTransaction.amountTime === null
+          || this.transaction.fixedTransaction.amountTime < 1)
+      ) {
         this.fieldsError.set('fixedTransaction.amountTime', true);
         return false;
       }
     }
-    if(this.fixedTransaction.isInstallment !== true && this.fixedTransaction.isInstallment !== false){
+    if (this.transaction.fixedTransaction.isInstallment !== true && this.transaction.fixedTransaction.isInstallment !== false) {
       this.fieldsError.set('fixedTransaction.isInstallment', true);
       return false;
-    }else{
-      if(this.fixedTransaction.isInstallment ){
-        if(this.fixedTransaction.typeInstallment !== 'Fixed' && this.fixedTransaction.typeInstallment !== 'Variable'){
-          this.fieldsError.set('fixedTransaction.typeInstallment', true);
+    } else {
+      if (this.transaction.fixedTransaction.isInstallment) {
+        if (this.transaction.fixedTransaction.amountInstallment === null
+          || this.transaction.fixedTransaction.amountInstallment < 2) {
+          this.fieldsError.set('fixedTransaction.amountInstallment', true);
           return false;
         }
-        if(this.fixedTransaction.amountInstallment === undefined 
-          || this.fixedTransaction.amountInstallment === null
-          || this.fixedTransaction.amountInstallment < 2){
-            this.fieldsError.set('fixedTransaction.amountInstallment', true);
-            return false;
-          }
-      }else{
-        this.fixedTransaction.typeInstallment = undefined;
-        this.fixedTransaction.amountInstallment = undefined;
+      } else {
+        this.transaction.fixedTransaction.amountInstallment = null;
       }
     }
-    if(this.selectedDate === undefined
-      || new Date(this.selectedDate) < new Date()){
+    if (this.selectedDate === undefined
+      || new Date(this.selectedDate) < new Date()) {
       this.fieldsError.set('selectedDate', true);
       return false;
     }
-    if(this.totalValue < 1){
+    this.transaction.fixedTransaction.startDate = new Date(this.selectedDate)
+    if (this.totalValue < 1) {
       this.fieldsError.set('totalValue', true);
       return false;
     }
+    this.transaction.fixedTransaction.value = this.totalValue;
     return true;
   }
 
-
-  validateTypeFixedTransaction():boolean{
-    switch(this.fixedTransaction?.type){
+  validateTypeFixedTransaction(): boolean {
+    switch (this.transaction.fixedTransaction.type) {
       case 'Monthly':
-        this.fixedTransaction.amountTime = undefined;
+        this.transaction.fixedTransaction.amountTime = 1;
         return true;
       case 'Annual':
-        this.fixedTransaction.amountTime = undefined;
+        this.transaction.fixedTransaction.amountTime = 1;
         return true;
       case 'Weekly':
-        this.fixedTransaction.amountTime = undefined;
+        this.transaction.fixedTransaction.amountTime = 1;
         return true;
       case 'Amount of Years':
         return true;
@@ -203,75 +213,60 @@ export class FormTransactionComponent implements OnInit {
       case 'Amount of Days':
         return true;
     }
-    this.fieldsError.set('fixedTransaction.type', true);
-    return false;
   }
 
-  categoryTransactionChange(event: string){
-    if(this.transaction != undefined && this.transaction != null){
-      this.transaction.categoryType = event;
-      if(this.transaction.categoryType === 'Eventual'
-        && (this.eventualTransaction === undefined
-        || this.eventualTransaction === null)){
-        this.eventualTransaction = new EventualTransaction();
-      }else if (this.transaction.categoryType === 'Fixed'
-      && (this.fixedTransaction === undefined
-      || this.fixedTransaction === null)){
-        this.fixedTransaction = new FixedTransaction();
-        this.fixedTransaction.type = 'Monthly';
-        this.fixedTransaction.isInstallment = false;
-      }
+  formatDate(newDate: Date): string {
+    const year = newDate.getFullYear();
+    const month = newDate.getMonth() < 10 ? '0' + newDate.getMonth() : newDate.getMonth();
+    const date = newDate.getDate() < 10 ? '0' + newDate.getDate() : newDate.getDate();
+    return `${year}-${month}-${date}`
+  }
+
+  constructTransaction() {
+    this.transaction.idEntity = this.transaction.entity.id;
+    if (this.transaction.categoryType === 'Fixed') {
+      this.transaction.idCategory = this.transaction.fixedTransaction.id
+    } else {
+      this.transaction.idCategory = this.transaction.eventualTransaction.id
     }
   }
-
-
-  isInstallmentChange(event:boolean){
-    if(this.fixedTransaction != null && this.fixedTransaction != undefined){
-      this.fixedTransaction.isInstallment = event;
+  /**
+   * Function to return a list of entities
+   * @returns {Promise<Entities[]>} - A Promise with a list of entities
+   */
+  getEntities(): Promise<Entities[]> {
+    return new Promise<Entities[]>((resolve, reject) => {
+      this.service.getEntities().subscribe(
+        {
+          next: (entities: Entities[]) => { resolve(entities) },
+          error: (error: HttpErrorResponse) => { reject(error) }
+        }
+      )
     }
+    );
   }
-
-  fixedTypeChange(event:string){
-    if(this.fixedTransaction != null && this.fixedTransaction != undefined){
-      this.fixedTransaction.type = event;
-    }
-  }
-
-  transactionTypeChange(event:string){
-    if(this.transaction != null && this.transaction != undefined){
-      this.transaction.type = event;
-    }
-
-  }
-
-  typeInstallmentChange(event:string){
-    if(this.fixedTransaction != null && this.fixedTransaction != undefined){
-      this.fixedTransaction.typeInstallment = event;
-    }
-  }
-
-  transactionNameChange(event:string){
-    if(this.transaction != undefined && this.transaction != null){
-      this.transaction.name = event
-    }
-  }
-
-  fixedTransactionAmountTimeChange(event:number){
-    if(this.fixedTransaction != undefined && this.fixedTransaction != null){
-      this.fixedTransaction.amountTime = event
-    }
-  }
-
-  fixedTransactionAmountInstallmentChange(event:number){
-    if(this.fixedTransaction != undefined && this.fixedTransaction != null){
-      this.fixedTransaction.amountInstallment = event
-    }
-  }
-
-  buttonEmit(signal:string){
-    this.signalButton.emit(signal)
+  /**
+   * Function to configure the registration page for new registrations
+   */
+  override async configPageAdd(): Promise<void> {
+    this.isLoading = true;
+    this.cleanRegister();
+    await this.getEntities()
+      .then((listEntities: Entities[]) => {
+        if (!listEntities.length) {
+          const entity = new Entities();
+          entity.name = 'Register an Entity';
+          listEntities = [entity]
+          this.transaction.entity = entity;
+          this.fieldsDisable.set('transaction.entity', true);
+        }
+        this.listEntities = listEntities;
+      })
+      .catch((error: HttpErrorResponse) => this.showErrorHTTP(error));
+      this.isLoading = false;
   }
 
 
 
 }
+

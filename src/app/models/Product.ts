@@ -1,5 +1,5 @@
-export class Product{
-    id?:number;
-    name?:string;
-    unitValue?:number;
+export class Product {
+    id: number | null = null;
+    name: string = '';
+    unitValue: number = 0;
 }

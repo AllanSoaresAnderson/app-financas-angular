@@ -1,10 +1,4 @@
-<app-modal *ngIf="openModal" [@fadeInOut] 
-    (signal)="readSignalModal($event)"
-    [type]="typeModal"
-    [messageBody]="msgModal"
-></app-modal>
-
-<div id="page" *ngIf="showComponent === 'main'" [@fadeInOut]>
+<div id="page" *ngIf="!isLoading; else spinner" [@fadeInOut]>
     <div class="container-form">
         <div class="card-form">
             <div class="input-label">
@@ -36,17 +30,19 @@
             </div>
         </div>
         <footer>
-            <button class="btn btn-danger" (click)="buttonEmit('cancel')">Cancel</button>
+            <button class="btn btn-danger" (click)="return()">Cancel</button>
             <button class="btn btn-success" (click)="save()">Save</button>
         </footer>
     </div>
 </div>
 
+<ng-template  #spinner>
+    <div class="container__spinner" [@fadeInOut]>
+        <mat-spinner></mat-spinner>
+        <h2 class="mt-1">Aguarde por alguns segundos..</h2>
+    </div>
+</ng-template>
 
-<div class="container__spinner" *ngIf="showComponent === 'spinner'" [@fadeInOut]>
-    <mat-spinner></mat-spinner>
-    <h2 class="mt-1">Aguarde por alguns segundos..</h2>
-</div>
 
 
 

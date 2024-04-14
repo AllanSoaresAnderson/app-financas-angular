@@ -1,4 +1,4 @@
-<div class="modal__container-top" *ngIf="type === 'confirm-delete'"> 
+<div class="modal__container-top" *ngIf="popupOpen && type === 'confirm-delete'"> 
     <div class="modal__content-top modal__content modal__confirm">
         <div class="content__header">
             <fa-icon [icon]="icon" ></fa-icon>
@@ -6,15 +6,15 @@
         </div>
         <p>{{messageBody}}</p>
         <div class="content__buttons">
-            <button class="btn btn-danger btn-sm" (click)="buttonEmit('close')">Cancel</button>
-            <button class="btn btn-success btn-sm" (click)="buttonEmit('confirm')">Confirm</button>
+            <button class="btn btn-danger btn-sm" (click)="close(); emitButtonClicked('close');">Cancel</button>
+            <button class="btn btn-success btn-sm" (click)="emitButtonClicked('confirm')">Confirm</button>
         </div>
     </div>
 </div> 
 
 
 <!--Modal Bottom Error-->
-<div class="modal__container-bottom" *ngIf="type === 'error-bottom'"> 
+<div class="modal__container-bottom" *ngIf="popupOpen && type === 'error-bottom'"> 
     <div class="modal__content-bottom modal__content modal__error">
         <fa-icon [icon]="icon" ></fa-icon>
         <h4>{{messageBody}}</h4>
@@ -23,7 +23,7 @@
 <!--Modal Bottom Error-->
 
 <!--Modal Bottom Saved-->
-<div class="modal__container-bottom" *ngIf="type === 'success-bottom'"> 
+<div class="modal__container-bottom" *ngIf="popupOpen && type === 'success-bottom'"> 
     <div class="modal__content-bottom modal__content modal__success">
         <fa-icon [icon]="icon" ></fa-icon>
         <h4>{{messageBody}}</h4>

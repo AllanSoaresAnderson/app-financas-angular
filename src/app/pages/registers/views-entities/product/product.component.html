@@ -74,10 +74,3 @@
         </footer><!--Fim Paginacao-->
     </div>
 </div>
-
-
-<app-form-products 
-    *ngIf="crudState !== 'read'" 
-    [@fadeInOut]
-    (signalButton)="readSignalButton($event)"
-></app-form-products>

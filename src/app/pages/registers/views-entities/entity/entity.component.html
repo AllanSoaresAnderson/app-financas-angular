@@ -1,13 +1,6 @@
-<app-modal *ngIf="openModal" [@modalInOut] 
-    (signal)="readSignalModal($event)"
-    [type]="typeModal"
-    [messageBody]="msgModal"
-></app-modal>
-
-
 <div *ngIf="!isLoading; else spinner">
-    <div *ngIf="crudState === 'read'; else form" [@fadeInOut]>
-        <crud-buttons type="return" routerLink="/Registers" class="button-return"></crud-buttons>
+    <div [@fadeInOut]>
+        <crud-buttons type="return" routerLink="/registers" class="button-return"></crud-buttons>
         <div class="container-page">
             <div class="card__container">
                 <div class="card-header__container">
@@ -20,7 +13,7 @@
                     <crud-buttons 
                         type="Add" 
                         class="mx-4" 
-                        (clicked)="crudOptions('add')"
+                        routerLink="/entities/register"
                         [disable]="disablePage"
                     ></crud-buttons>
 
@@ -34,7 +27,7 @@
                                 <tr>
                                     <th scope="col"></th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">is Person?</th>
+                                    <th scope="col">Is a Person?</th>
                                     <th scope="col">Quantiy of Earnings</th>
                                     <th scope="col">Quantity of Expenses</th>
                                 </tr>
@@ -44,12 +37,12 @@
                                     <td>
                                         <crud-buttons 
                                             type="Delete" 
-                                            (clicked)="openConfirmModal('delete', entity.id)"
+                                            (clicked)="openConfirmModal('delete' ,entity.id)"
                                             [disable]="disablePage"
                                         ></crud-buttons>
                                         <crud-buttons 
                                             type="Edit" 
-                                            (clicked)="updateEntity(entity.id)" 
+                                            [routerLink]="'/entities/register/'+ entity.id "
                                             class="ml-1" 
                                             [disable]="disablePage"
                                         ></crud-buttons>
@@ -58,7 +51,7 @@
                                         {{entity.name}}
                                     </td>
                                     <td>
-                                        {{entity.isPerson}}
+                                        {{ entity.isPerson ? 'Yes' : 'No'}}
                                     </td>
                                     <td>
                                         {{entity.quantityExpenses}}
@@ -142,21 +135,12 @@
                             </label>
                         </div>
                     </div>
-                    <crud-buttons type="search" [disable]="disablePage" (clicked)="getListEntities()"></crud-buttons>
+                    <crud-buttons type="search" [disable]="disablePage" (clicked)="getList()"></crud-buttons>
                 </div>
 
             </footer><!--Fim Paginacao-->
         </div>
     </div>
-
-    <ng-template #form>
-        <app-form-entity 
-            [@fadeInOut] 
-            (signal)="readSignalForm($event)"
-            [typeOperation]="crudState"
-            [id]="idEntitySelected"
-        ></app-form-entity>
-    </ng-template>
 </div>
 
 <ng-template #spinner>

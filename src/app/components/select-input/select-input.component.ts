@@ -13,17 +13,18 @@ export class SelectInputComponent {
 
   optionsOpened:boolean = false;
   @Input()
-  selectedField:string = 'Choose';
-  @Output() 
-  selectedFieldChange: EventEmitter<string>= new EventEmitter();
-  @Input()
-  listOptions: string[] = ['First option', 'Second Option'];
-  @Input()
   disabled:boolean = false;
   @Input()
   error:boolean = false;
   @Input()
   errorMsg:string = 'error';
+  @Input() listOptions:any[]= ['Choose'];
+  @Input() selectedField:any = {"name":"Choose", "id": null};
+  @Input() fieldDisplayed: string = 'name';
+  @Input() showsItUp : boolean = false;
+  @Output() selectedFieldChange: EventEmitter<any> = new EventEmitter();
+  
+
 
 
 
@@ -40,10 +41,9 @@ export class SelectInputComponent {
     this.optionsOpened = !this.optionsOpened;
   }
 
-  selectOption(option:string){
+  selectOption(option:any){
     this.selectedField = option;
     this.selectedFieldChange.emit(option);
     this.openOptions();
   }
-
 }

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Entities } from '../../../models/Entities';
 import { Observable } from 'rxjs';
+import { Transactions } from '../../../models/Transactions';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,8 @@ export class RegistersService {
   }
 
   constructor(private http: HttpClient) { }
+
+  /*START Entities*/
 
   addEntity(entity: Entities) {
     return this.http.post(this.apiUrl + '/entity', entity);
@@ -51,6 +54,37 @@ export class RegistersService {
   updateEntity(entity: Entities) {
     return this.http.put(this.apiUrl + '/entity', entity);
   }
+
+  /*END Entities*/
+
+
+  /*Start Transactions*/
+  getListTransactionsScreenRegisters(page: number, size: number, name?: string): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
+    if (name && name.trim()) {
+      params = params.set('name', name);
+    }
+    return this.http.get<any>(this.apiUrl + '/transactions/registers', { params: params });
+  }
+
+  getTransactionById(id: number) {
+    return this.http.get<Transactions>(this.apiUrl + '/transactions/' + id);
+  }
+
+  deleteTransaction(id:number){
+    return this.http.delete(this.apiUrl + '/transactions/' + id);
+  }
+
+  addTransaction(transaction: Transactions){
+    return this.http.post(this.apiUrl + '/transactions', transaction);
+  }
+
+
+
+  /*END Transactions*/
+
 
 
 }

@@ -7,6 +7,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { SideBarComponent } from "./components/side-bar/side-bar.component";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MenuTopComponent } from "./components/menu-top/menu-top.component";
+import { ModalComponent } from "./components/modal/modal.component";
 
 
 @Component({
@@ -14,7 +15,7 @@ import { MenuTopComponent } from "./components/menu-top/menu-top.component";
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
-    imports: [CommonModule, RouterOutlet, HomeComponent, FontAwesomeModule, RouterLink, RouterLinkActive, SideBarComponent, NgbModule, MenuTopComponent]
+    imports: [CommonModule, RouterOutlet, HomeComponent, FontAwesomeModule, RouterLink, RouterLinkActive, SideBarComponent, NgbModule, MenuTopComponent, ModalComponent]
 })
 export class AppComponent {
   title = 'Finances';

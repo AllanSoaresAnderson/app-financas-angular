@@ -181,6 +181,21 @@ footer{
     color: rgba(255, 255, 255, 0.788);
 }
 
+
+.container__spinner{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    color: #fff;
+}
+
+.container__spinner h2{
+    text-align: center;
+    margin-top: 30px;
+}
+
 @media (max-width: 1000px) {
     .body__controller {
         grid-template-columns: repeat(3, 1fr); /* 3 colunas para telas menores que 576px */

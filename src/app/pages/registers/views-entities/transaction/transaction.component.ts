@@ -1,96 +1,125 @@
-import { Component, OnInit } from '@angular/core';
-import { CrudButtonsComponent } from "../../../../components/buttons/crud-buttons/crud-buttons.component";
-import { Transactions } from '../../../../models/Transactions';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { SelectInputFilterComponent } from "../../../../components/select-input-filter/select-input-filter.component";
-import { FormTransactionComponent } from "../../forms/form-transaction/form-transaction.component";
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { CrudButtonsComponent } from "../../../../components/buttons/crud-buttons/crud-buttons.component";
+import { SelectInputFilterComponent } from "../../../../components/select-input-filter/select-input-filter.component";
+import { CrudPage } from '../../../global/crud-page/crud-page';
+import { FormTransactionComponent } from "../../forms/form-transaction/form-transaction.component";
+import { ModalComponent } from "../../../../components/modal/modal.component";
+import { RegistersService } from '../../services/registers.service';
+import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MaterialsModule } from '../../../../module/angular.material.module';
+import { MessagePageService } from '../../../../services/message-page.service';
 
 @Component({
     selector: 'app-transaction',
     standalone: true,
     templateUrl: './transaction.component.html',
     styleUrl: './transaction.component.css',
-    imports: [CrudButtonsComponent, CommonModule, FormsModule, SelectInputFilterComponent, FormTransactionComponent, RouterModule],
-    animations:[
+    animations: [
         trigger('btnState', [
-            state('inactive', style(
-                {
-                    backgroundColor: 'red',
-                    transform: 'scale(1)',
-                }
-            )),
-            state('active', style(
-                {
-                    backgroundColor: 'blue',
-                    transform: 'scale(1.2)',
-                }
-            )),
+            state('inactive', style({
+                backgroundColor: 'red',
+                transform: 'scale(1)',
+            })),
+            state('active', style({
+                backgroundColor: 'blue',
+                transform: 'scale(1.2)',
+            })),
             transition('inactive => active', animate('2s ease-in')),
             transition('active => inactive', animate('0.5s ease-out')),
         ]),
         trigger('fadeInOut', [
             transition(':enter', [
-              style({ opacity: 0 }),
-              animate('1s', style({ opacity: 1 })),
+                style({ opacity: 0 }),
+                animate('1s', style({ opacity: 1 })),
             ]),
-          ])
-    ]
+        ])
+    ],
+    imports: [CrudButtonsComponent, CommonModule, FormsModule, SelectInputFilterComponent, FormTransactionComponent, RouterModule, ModalComponent, MaterialsModule]
 })
-export class TransactionComponent implements OnInit{
-    listTransactions: any[] = []
-    filterDate:string = ''
-    filterName:string = ''
-    listFilterType: string[] = ['Everyone','Fixed', 'Eventual']
-    listFilterEntity: string[] = ['Everyone','Me', 'House']
-    filterTypeSelected:string = 'Filter by type...'
-    filterEntitySelected:string = 'Filter by Entity...'
-    crudState:string = 'read'
-
-
-
-
+export class TransactionComponent extends CrudPage implements OnInit, AfterViewInit {
+    constructor(
+        private service: RegistersService,
+        protected override messagePageService: MessagePageService) {
+        super(messagePageService);
+    }
     ngOnInit(): void {
-        const dateNow = new Date();
-        dateNow.setDate(1); 
-        this.filterDate = this.formatDate(dateNow);
-       const transaction1:any = {};
-       const transaction2:any = {};
-        transaction1.name = 'Faculdade';
-        transaction1.type = 'Eventual'
-        transaction1.value = 200.39
-        transaction1.entity = 'Me'
-        transaction2.name = 'Aluguel';
-        transaction2.type = 'Fixed'
-        transaction2.value = 1200.39
-        transaction2.entity = 'House'
+        this.getList();
+    }
+    ngAfterViewInit(): void {
+        
+    }
+    override currentPage: number = 0;
+    override pageSize: number = 5;
+    override lastPage: number = 100;
 
-       this.listTransactions.push(transaction1);
-       this.listTransactions.push(transaction2);
+    filterName: string = '';
+    filterDate: string = '';
+    listTransactions: any[] = [];
+
+    override getList(): void {
+        this.isLoading = true;
+        this.service.getListTransactionsScreenRegisters(this.currentPage, this.pageSize, this.filterName)
+            .pipe(
+                finalize(
+                    () => {
+                        this.isLoading = false;
+                    }
+                )
+            )
+            .subscribe(
+                {
+                    next: (value) => {
+                        this.listTransactions = value.content
+                        if (value.totalPages) {
+                            this.lastPage = value.totalPages - 1;
+                        }
+                    },
+                    error: (error: HttpErrorResponse) => {
+                        this.showErrorHTTP(error)
+                    }
+                }
+            )
+
+
     }
 
-
-
-    formatDate(date: Date): string {
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-        return `${year}-${month}-${day}`;
-    }
-
-
-
-    crudOptions(option:string){
-        this.crudState = option
-    }
-
-    readSignalButton(event:string){
-        if(event === 'cancel'){
-            this.crudState = 'read';
+    override delete(id: number): void {
+        this.isLoading = true;
+        if (id) {
+            this.service.deleteTransaction(id)
+                .pipe(
+                    finalize(() => {
+                        this.isLoading = false;
+                        this.getList();
+                        this.disablePage = false;
+                    })
+                )
+                .subscribe(
+                    {
+                        error: (error: HttpErrorResponse) => {
+                            switch (error.status) {
+                                case 404:
+                                    this.modal.type = 'error-bottom';
+                                    this.modal.messageBody = 'Entity not found';
+                                    this.showModal(this.modal);
+                                    break;
+                                default:
+                                   this.showErrorHTTP(error);
+                            }
+                        }
+                    }
+                )
         }
-
     }
+
+    // override update(id: number): void {
+    //     this.idSelected = id;
+    //     this.crudOptions('update');
+    // }
 
 }
